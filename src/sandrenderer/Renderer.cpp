@@ -6,7 +6,7 @@
  * @author Willow Ciesialka
 */
 
-#include "sandrenderer/Renderer.hpp"
+#include "Renderer.hpp"
 
 void sandrenderer::Renderer::render() const {
     sf::RenderWindow& render_window = this->window->get_window();

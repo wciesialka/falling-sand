@@ -11,8 +11,8 @@
 
 #include <vector>
 #include <algorithm>
-#include "sandrenderer/Renderable.hpp"
-#include "sandrenderer/Window.hpp"
+#include "Renderable.hpp"
+#include "Window.hpp"
 
 namespace sandrenderer
 {

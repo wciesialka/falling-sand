@@ -9,8 +9,9 @@
 #ifndef SANDRENDERER_WINDOW_H
 #define SANDRENDERER_WINDOW_H
 
+#include <string>
 #include <SFML/Graphics.hpp>
-#include "sandrenderer/Renderable.hpp"
+#include "Renderable.hpp"
 
 namespace sandrenderer {
     class Window {
@@ -18,7 +19,7 @@ namespace sandrenderer {
             static const sf::Uint32 WINDOW_FLAGS = sf::Style::Titlebar | sf::Style::Close;
 
             Window(sf::RenderWindow* window) : window(window) {};
-            Window(int width, int height, char* title) {
+            Window(int width, int height, std::string title) {
                 this->window = new sf::RenderWindow(sf::VideoMode(width, height), title, sandrenderer::Window::WINDOW_FLAGS);
             };
             ~Window() {

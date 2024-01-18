@@ -6,7 +6,7 @@
  * @author Willow Ciesialka
 */
 
-#include "sandrenderer/Pixel.hpp"
+#include "Pixel.hpp"
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 

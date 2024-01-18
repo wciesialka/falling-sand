@@ -8,10 +8,19 @@
  * @author Willow Ciesialka
 */
 
-#include <iostream>
+#include "sandrenderer/Renderer.hpp"
+#include "sandrenderer/Pixel.hpp"
+#include <thread>
+
+#define WIDTH 640
+#define HEIGHT 360
 
 int main(){
-    std::cout << "Hello, world!" << std::endl;
+    sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH, HEIGHT);
+    sandrenderer::Pixel* pixel = new sandrenderer::Pixel(100, 100, 200, 100, 0);
+    renderer->add_renderable(pixel);
+
+    renderer->render();
 
     return 0;
 }

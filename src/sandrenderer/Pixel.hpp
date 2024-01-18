@@ -9,7 +9,7 @@
 #ifndef SANDRENDERER_PIXEL_H
 #define SANDRENDERER_PIXEL_H
 
-#include "sandrenderer/Renderable.hpp"
+#include "Renderable.hpp"
 #include <SFML/Graphics/Color.hpp>
 
 namespace sandrenderer

@@ -24,7 +24,7 @@ BDIR = ./build
 SOURCE_PATHS = $(shell find $(SDIR) -iname "*.cpp")
 
 # Sources/Build Object paths
-CLASSES = main
+CLASSES = main sandrenderer/Pixel sandrenderer/Renderer
 OBJECTS = $(addprefix $(BDIR)/,$(addsuffix .o, $(CLASSES)))
 
 .PHONY: all run clean

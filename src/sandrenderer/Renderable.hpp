@@ -10,7 +10,6 @@
 #define SANDRENDERER_RENDERABLE_H
 
 #include <SFML/Graphics.hpp>
-
 namespace sandrenderer {
     /**
      * @brief Interface for an object that is renderable on the screen.
