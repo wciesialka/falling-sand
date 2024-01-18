@@ -53,6 +53,18 @@ namespace sandrenderer
             this->renderables->erase(it);
             return true;
         }
+
+        /**
+         * @brief Get the renderer's window.
+         * 
+         * @returns The renderer's window.
+        */
+        sandrenderer::Window* get_window() const{
+            return this->window;
+        }
+
+        void render() const;
+
     private:
         sandrenderer::Window *window;
         Renderables *renderables;

@@ -9,15 +9,17 @@
 #ifndef SANDRENDERER_WINDOW_H
 #define SANDRENDERER_WINDOW_H
 
-#include <SFML/Window.hpp>
+#include <SFML/Graphics.hpp>
 #include "sandrenderer/Renderable.hpp"
 
 namespace sandrenderer {
     class Window {
         public:
-            Window(sf::Window* window) : window(window) {};
+            static const sf::Uint32 WINDOW_FLAGS = sf::Style::Titlebar | sf::Style::Close;
+
+            Window(sf::RenderWindow* window) : window(window) {};
             Window(int width, int height, char* title) {
-                this->window = new sf::Window(sf::VideoMode(width, height), title);
+                this->window = new sf::RenderWindow(sf::VideoMode(width, height), title, sandrenderer::Window::WINDOW_FLAGS);
             };
             ~Window() {
                 this->close();
@@ -34,11 +36,11 @@ namespace sandrenderer {
             /**
              * @brief Get the inner rendering window.
             */
-            sf::Window& get_window() const {
+            sf::RenderWindow& get_window() const {
                 return *(this->window);
             }
         private:
-            sf::Window* window;
+            sf::RenderWindow* window;
     };
 }
 

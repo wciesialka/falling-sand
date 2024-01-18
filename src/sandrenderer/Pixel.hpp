@@ -69,7 +69,7 @@ namespace sandrenderer
             return this->color;
         }
 
-        virtual void render(const sf::Window &window) const;
+        virtual void render(sf::RenderWindow &window) const;
 
     private:
         sf::Vector2f position;
