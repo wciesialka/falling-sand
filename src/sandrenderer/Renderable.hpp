@@ -16,6 +16,10 @@ namespace sandrenderer {
     */
     class Renderable {
         public:
+            Renderable() : render_position(sf::Vector2f(0, 0)) {};
+            Renderable(sf::Vector2f position) : render_position(position) {};
+            Renderable(int x, int y) : render_position(sf::Vector2f(x, y)) {};
+
             virtual ~Renderable() {};
 
             /**
@@ -27,38 +31,38 @@ namespace sandrenderer {
             virtual void render(sf::RenderWindow& window) const = 0;
 
             /**
-             * @brief Set the position of the pixel on the screen.
+             * @brief Set the position of the element on the screen.
              *
              * @param value New position.
              */
             inline void set_render_position(const sf::Vector2f value)
             {
-                this->position = value;
+                this->render_position = value;
             }
 
             /**
-             * @brief Set the position of the pixel on the screen.
+             * @brief Set the position of the element on the screen.
              *
              * @param x new x-coordinate
              * @param y new y-coordinate
              */
             inline void set_render_position(const int x, const int y)
             {
-                this->position = sf::Vector2f(x, y);
+                this->render_position = sf::Vector2f(x, y);
             }
 
             /**
-             * @brief Get the position of the pixel on the screen.
+             * @brief Get the position of the element on the screen.
              *
-             * @return Position of the pixel.
+             * @return Position of the element.
              */
             inline sf::Vector2f get_render_position() const
             {
-                return this->position;
+                return this->render_position;
             }
 
         private:
-            sf::Vector2f position;
+            sf::Vector2f render_position;
     };
 }
 

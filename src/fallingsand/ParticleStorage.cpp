@@ -8,9 +8,11 @@
 
 #include "ParticleStorage.hpp"
 
+#include <iostream>
+
 void fallingsand::ParticleStorage::add_particle(fallingsand::Particle* particle) {
-    unsigned int x_in_chunk = particle->get_x() % this->get_x();
-    unsigned int y_in_chunk = particle->get_y() % this->get_y();
+    unsigned int x_in_chunk = particle->get_x() % this->get_width();
+    unsigned int y_in_chunk = particle->get_y() % this->get_height();
 
     unsigned int key = this->form_key(x_in_chunk, y_in_chunk);
     this->particles->insert({key, particle});
