@@ -13,7 +13,7 @@
 #include <thread>
 
 #define WIDTH 640
-#define HEIGHT 360
+#define HEIGHT 640
 
 int main(){
     sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH, HEIGHT);

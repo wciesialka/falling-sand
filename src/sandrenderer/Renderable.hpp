@@ -16,6 +16,8 @@ namespace sandrenderer {
     */
     class Renderable {
         public:
+            virtual ~Renderable() {};
+
             /**
              * @brief Render the renderable object onto a screen. Every renderable
              * object must implement this method.

@@ -5,7 +5,7 @@
 # @date 2024-01-17
 
 # Executable name
-EXEC = falling_sand
+EXEC = sand
 
 # Compiler command
 CC = g++
@@ -24,7 +24,7 @@ BDIR = ./build
 SOURCE_PATHS = $(shell find $(SDIR) -iname "*.cpp")
 
 # Sources/Build Object paths
-CLASSES = main sandrenderer/Pixel sandrenderer/Renderer
+CLASSES = main sandrenderer/Pixel sandrenderer/Renderer fallingsand/ParticleStorage fallingsand/Simulation
 OBJECTS = $(addprefix $(BDIR)/,$(addsuffix .o, $(CLASSES)))
 
 .PHONY: all run clean

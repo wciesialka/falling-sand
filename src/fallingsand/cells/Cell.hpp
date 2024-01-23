@@ -1,6 +1,6 @@
 /**
  * @file Cell.hpp
- * @brief Basic cell implementation.
+ * @brief Basic cell class.
  * 
  * @date 2024-01-23
  * @author Willow Ciesialka
@@ -14,7 +14,7 @@
 namespace fallingsand {
     class Cell {
         public:
-            Cell(sandrenderer::Renderable* renderable) : renderable(renderable) {}
+            Cell(sandrenderer::Renderable* renderable) : x(0), y(0), renderable(renderable) {}
             ~Cell() { delete this->renderable; }
 
             /**
