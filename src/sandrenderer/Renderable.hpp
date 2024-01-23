@@ -31,7 +31,7 @@ namespace sandrenderer {
              *
              * @param value New position.
              */
-            inline void set_position(const sf::Vector2f value)
+            inline void set_render_position(const sf::Vector2f value)
             {
                 this->position = value;
             }
@@ -42,7 +42,7 @@ namespace sandrenderer {
              * @param x new x-coordinate
              * @param y new y-coordinate
              */
-            inline void set_position(const int x, const int y)
+            inline void set_render_position(const int x, const int y)
             {
                 this->position = sf::Vector2f(x, y);
             }
@@ -52,7 +52,7 @@ namespace sandrenderer {
              *
              * @return Position of the pixel.
              */
-            inline sf::Vector2f get_position() const
+            inline sf::Vector2f get_render_position() const
             {
                 return this->position;
             }

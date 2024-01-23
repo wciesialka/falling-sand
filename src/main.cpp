@@ -9,18 +9,35 @@
 */
 
 #include "sandrenderer/Renderer.hpp"
-#include "sandrenderer/Pixel.hpp"
-#include <thread>
+#include "fallingsand/Simulation.hpp"
+#include "fallingsand/cells/Sand.hpp"
+
+#include <iostream>
 
 #define WIDTH 640
 #define HEIGHT 640
 
 int main(){
     sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH, HEIGHT);
-    sandrenderer::Pixel* pixel = new sandrenderer::Pixel(100, 100, 200, 100, 0);
-    renderer->add_renderable(pixel);
+    fallingsand::Simulation* simulation = new fallingsand::Simulation(1, WIDTH, HEIGHT); 
 
-    renderer->render();
+    std::cout << "Renderer and Simulation initialized." << std::endl;
+
+    renderer->add_renderable(simulation);
+
+    fallingsand::Sand* sand = new fallingsand::Sand();
+    sand->set_position(10, 10);
+
+    std::cout << "Sand initialized." << std::endl;
+
+    simulation->add_particle(sand);
+
+    std::cout << "Sand added to renderer." << std::endl;
+
+    renderer->begin_rendering();
+
+    delete renderer;
+    delete simulation;
 
     return 0;
 }

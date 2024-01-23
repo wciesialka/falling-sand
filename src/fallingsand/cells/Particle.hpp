@@ -18,12 +18,6 @@ namespace fallingsand {
     class Particle : public Cell {
         public:
             Particle(const int r, const int g, const int b) : Cell(new sandrenderer::Pixel(r, g, b)) {};
-
-            /* CELL SIMULATIONS! */
-            /**
-             * @brief Get the weight of the cell.
-            */
-            virtual int get_weight() const = 0;
     };
 }
 

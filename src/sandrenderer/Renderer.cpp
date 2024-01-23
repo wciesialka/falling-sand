@@ -8,7 +8,7 @@
 
 #include "Renderer.hpp"
 
-void sandrenderer::Renderer::render() const {
+void sandrenderer::Renderer::begin_rendering() const {
     sf::RenderWindow& render_window = this->window->get_window();
     while (render_window.isOpen())
     {

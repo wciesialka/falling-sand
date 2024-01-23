@@ -26,10 +26,10 @@ namespace sandrenderer
         Pixel() : color(sf::Color::Black){};
         Pixel(sf::Color color) : color(color) {};
         Pixel(int r, int g, int b) : color(sf::Color(r,g,b)) {};
-        Pixel(sf::Vector2f position, sf::Color color) : color(color){ this->set_position(position); };
-        Pixel(sf::Vector2f position, int r, int g, int b) : color(sf::Color(r, g, b)){ this->set_position(position); };
-        Pixel(int x, int y, sf::Color color) : color(color){ this->set_position(x, y); };
-        Pixel(int x, int y, int r, int g, int b) : color(sf::Color(r, g, b)){ this->set_position(x, y); };
+        Pixel(sf::Vector2f position, sf::Color color) : color(color){ this->set_render_position(position); };
+        Pixel(sf::Vector2f position, int r, int g, int b) : color(sf::Color(r, g, b)){ this->set_render_position(position); };
+        Pixel(int x, int y, sf::Color color) : color(color){ this->set_render_position(x, y); };
+        Pixel(int x, int y, int r, int g, int b) : color(sf::Color(r, g, b)){ this->set_render_position(x, y); };
 
         /**
          * @brief Set the color of the pixel on the screen.

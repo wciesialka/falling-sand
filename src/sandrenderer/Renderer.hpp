@@ -63,7 +63,7 @@ namespace sandrenderer
             return this->window;
         }
 
-        void render() const;
+        void begin_rendering() const;
 
     private:
         sandrenderer::Window *window;

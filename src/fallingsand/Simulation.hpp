@@ -14,33 +14,36 @@
 #include <vector>
 #include "cells/Particle.hpp"
 #include "ParticleStorage.hpp"
+#include "../sandrenderer/Renderable.hpp"
 
 namespace fallingsand
 {
-    typedef std::vector<fallingsand::ParticleStorage *> StorageVector;
-
-    class Simulation
+    class Simulation : public sandrenderer::Renderable
     {
     public:
-        // This is exponential. ie 1 = 1, 2 = 4, 3 = 9
-        const unsigned int CHUNK_COUNT = 1;
-
-        Simulation(const unsigned int width, const unsigned int height) : width(width), height(height)
+        /**
+         * @brief Construct a Simulation.
+         * 
+         * @param chunk_count log2 number of chunks (1 = 1, 2 = 4, 3 = 9, etc.),
+         * @param width Width of simulation.
+         * @param height Height of simulation. 
+        */
+        Simulation(const unsigned int chunk_count, const unsigned int width, const unsigned int height) : chunk_count(chunk_count), width(width), height(height)
         {
-            this->chunk_width = this->width / fallingsand::Simulation::CHUNK_COUNT;
-            this->chunk_height = this->height / fallingsand::Simulation::CHUNK_COUNT;
-            this->storage = this->initialize_storage();
+            this->chunk_width = this->width / this->chunk_count;
+            this->chunk_height = this->height / this->chunk_count;
+            this->initialize_storage();
         }
         ~Simulation()
         {
             delete this->storage;
         }
 
-        void render(sf::RenderWindow &window) const
+        virtual void render(sf::RenderWindow &window) const
         {
-            for (fallingsand::ParticleStorage *storage : *(this->storage))
+            for (unsigned int i = 0; i < this->chunk_count; i++)
             {
-                storage->render(window);
+                this->storage[i]->render(window);
             }
         }
 
@@ -60,30 +63,22 @@ namespace fallingsand
 
         /**
          * @brief Add a particle to the simulation.
-         * 
+         *
          * @param particle Particle to add.
          */
-        void add_particle(fallingsand::Particle *particle)
-        {
-            fallingsand::ParticleStorage *chunk = this->get_containing_chunk(particle->get_x(), particle->get_y());
-            chunk->add_particle(particle);
-        }
+        void add_particle(fallingsand::Particle *particle);
 
     private:
+        unsigned int chunk_count;
         unsigned int width;
         unsigned int height;
         unsigned int chunk_width;
         unsigned int chunk_height;
 
         /**
-         * @brief Initialize a storage vector.
-         *
-         * @param width Width of the simulation.
-         * @param height Height of the simulation.
-         *
-         * @return Vector containing all the initialized chunks.
+         * @brief Initialize storage buffer.
          */
-        fallingsand::StorageVector *initialize_storage() const;
+        void initialize_storage();
 
         /**
          * @brief Get the chunk containing an x-y coordinate.
@@ -95,7 +90,7 @@ namespace fallingsand
          */
         fallingsand::ParticleStorage *get_containing_chunk(const unsigned int x, const unsigned int y) const;
 
-        fallingsand::StorageVector *storage;
+        fallingsand::ParticleStorage **storage;
     };
 }
 

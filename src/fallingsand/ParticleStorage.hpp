@@ -12,17 +12,18 @@
 #include <map>
 #include <exception>
 #include "cells/Particle.hpp"
+#include "../sandrenderer/Renderable.hpp"
 
 namespace fallingsand
 {
     typedef std::map<unsigned int, fallingsand::Particle *> ParticleMap;
 
-    class ParticleStorage
+    class ParticleStorage : public sandrenderer::Renderable
     {
     public:
         ParticleStorage(const unsigned int width, const unsigned int height, unsigned int x, unsigned int y) : width(width), height(height), x(x), y(y)
         {
-            this->particles = new ParticleMap;
+            this->particles = new ParticleMap();
             this->buffer = nullptr;
         };
 
@@ -62,7 +63,7 @@ namespace fallingsand
          */
         fallingsand::Particle *get_particle(const unsigned int x, const unsigned int y) const;
 
-        void render(sf::RenderWindow &window) const
+        virtual void render(sf::RenderWindow &window) const
         {
             for (const auto &kv : *(this->particles))
             {
