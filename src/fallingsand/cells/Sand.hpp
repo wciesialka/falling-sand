@@ -1,6 +1,6 @@
 /**
  * @file Sand.hpp
- * @brief Contains declerations for the Sand particle type.
+ * @brief Contains declerations for the Sand particle.
  * 
  * @date 2024-01-23
  * @author Willow Ciesialka
@@ -10,11 +10,12 @@
 #define FALLINGSAND_CELLS_SAND_H
 
 #include "Particle.hpp"
+#include "types/SandType.hpp"
 
 namespace fallingsand {
     class Sand : public fallingsand::Particle {
         public:
-            Sand() : fallingsand::Particle(205, 170, 109) {};
+            Sand() : Particle(205, 170, 109, new fallingsand::SandType(), new fallingsand::SandType()) {}
     };
 }
 

@@ -27,6 +27,7 @@ int main(){
 
     fallingsand::Sand* sand = new fallingsand::Sand();
     sand->set_position(10, 10);
+    sand->commit();
 
     std::cout << "Sand initialized." << std::endl;
 

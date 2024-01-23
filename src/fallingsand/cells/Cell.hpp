@@ -24,20 +24,14 @@ namespace fallingsand
          *
          * @param x New x coordinate.
          */
-        void set_x(const int x)
-        {
-            this->x = x;
-        }
+        virtual void set_x(const int x) = 0;
 
         /**
          * @brief Set the y position of the cell.
          *
          * @param y New y coordinate.
          */
-        void set_y(const int y)
-        {
-            this->y = y;
-        }
+        virtual void set_y(const int y) = 0;
 
         /**
          * @brief Set the position of the cell.
@@ -56,20 +50,14 @@ namespace fallingsand
          *
          * @returns Cell's x-coordinate.
          */
-        int get_x() const
-        {
-            return this->x;
-        }
+        virtual int get_x() const = 0;
 
         /**
          * @brief Get the y position of the cell.
          *
          * @returns Cell's y-coordinate.
          */
-        int get_y() const
-        {
-            return this->y;
-        }
+        virtual int get_y() const = 0;
 
         /**
          * @brief Move the cell by a specific amount.
