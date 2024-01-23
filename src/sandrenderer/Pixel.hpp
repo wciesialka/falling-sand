@@ -23,31 +23,11 @@ namespace sandrenderer
         /**
          * Constructor for the Pixel renderable.
          */
-        Pixel() : position(sf::Vector2f(0, 0)), color(sf::Color::Black){};
-        Pixel(sf::Vector2f position, sf::Color color) : position(position), color(color){};
-        Pixel(sf::Vector2f position, int r, int g, int b) : position(position), color(sf::Color(r, g, b)){};
-        Pixel(int x, int y, sf::Color color) : position(sf::Vector2f(x, y)), color(color){};
-        Pixel(int x, int y, int r, int g, int b) : position(sf::Vector2f(x, y)), color(sf::Color(r, g, b)){};
-
-        /**
-         * @brief Set the position of the pixel on the screen.
-         *
-         * @param value New position.
-         */
-        inline void set_position(sf::Vector2f value)
-        {
-            this->position = value;
-        }
-
-        /**
-         * @brief Get the position of the pixel on the screen.
-         *
-         * @return Position of the pixel.
-         */
-        inline sf::Vector2f get_position() const
-        {
-            return this->position;
-        }
+        Pixel() : color(sf::Color::Black){};
+        Pixel(sf::Vector2f position, sf::Color color) : color(color){ this->set_position(position); };
+        Pixel(sf::Vector2f position, int r, int g, int b) : color(sf::Color(r, g, b)){ this->set_position(position); };
+        Pixel(int x, int y, sf::Color color) : color(color){ this->set_position(x, y); };
+        Pixel(int x, int y, int r, int g, int b) : color(sf::Color(r, g, b)){ this->set_position(x, y); };
 
         /**
          * @brief Set the color of the pixel on the screen.
@@ -72,7 +52,6 @@ namespace sandrenderer
         virtual void render(sf::RenderWindow &window) const;
 
     private:
-        sf::Vector2f position;
         sf::Color color;
     };
 }
