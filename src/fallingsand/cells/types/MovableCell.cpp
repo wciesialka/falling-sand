@@ -7,6 +7,7 @@
 */
 
 #include "MovableCell.hpp"
+#include <iostream>
 
 bool fallingsand::elements::MovableCell::fall() {
     bool in_freefall = false;
@@ -33,7 +34,7 @@ bool fallingsand::elements::MovableCell::fall() {
         return true;
     }
     // Falling off corners
-    for(int i = 0; i < this->get_falling_dx(); i++){
+    for(unsigned int i = 0; i < this->get_falling_dx(); i++){
         if(this->get_neighbor(i, di)){
             if(this->get_neighbor(-i, di)){
                 continue;

@@ -28,6 +28,7 @@ int main(){
             factory->create(fallingsand::CellType::WALL, i, j);
         }
     }
+    factory->create(fallingsand::CellType::SAND, 300, 10);
     simulation->update_all();
 
     renderer->begin_rendering();

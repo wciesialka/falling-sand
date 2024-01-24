@@ -7,11 +7,13 @@
 */
 
 #include <exception>
+#include <iostream>
 #include "Cell.hpp"
 #include "CellularMatrix.hpp"
 #include "../../sandrenderer/Pixel.hpp"
 
 #include "types/Wall.hpp"
+#include "types/Sand.hpp"
 
 fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::CellType type) {
     fallingsand::Cell* cell;
@@ -21,6 +23,10 @@ fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::C
         case fallingsand::CellType::WALL:
             pixel = new sandrenderer::Pixel(169, 169, 169);
             state = new fallingsand::elements::Wall();
+            break;
+        case fallingsand::CellType::SAND:
+            pixel = new sandrenderer::Pixel(194, 178, 128);
+            state = new fallingsand::elements::Sand();
             break;
         default:
             throw std::invalid_argument("Cannot create a Cell of undefined CellType.");
@@ -32,13 +38,18 @@ fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::C
 
 fallingsand::CellState* fallingsand::Cell::get_neighbor(const int dx, const int dy) const 
 {
+    fallingsand::Cell* neighbor_cell;
     try {
         unsigned int x = this->get_x() + dx;
         unsigned int y = this->get_y() + dy;
-        return this->get_parent()->get(x, y)->get_state();
+        neighbor_cell = this->get_parent()->get(x, y);
     } catch(std::out_of_range& e) {
         return nullptr;
     }
+    if(neighbor_cell){
+        return neighbor_cell->get_state();
+    }
+    return nullptr;
 } 
 
 void fallingsand::Cell::set_neighbor(const int dx, const int dy, fallingsand::Cell* cell) const {
