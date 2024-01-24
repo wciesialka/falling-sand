@@ -8,18 +8,18 @@
  * @author Willow Ciesialka
  */
 
-#ifndef FALLINGSAND_CELLS_TYPES_PARTICLESTATE_H
-#define FALLINGSAND_CELLS_TYPES_PARTICLESTATE_H
+#ifndef FALLINGSAND_CELLS_TYPES_CELLSTATE_H
+#define FALLINGSAND_CELLS_TYPES_CELLSTATE_H
 
 namespace fallingsand
 {
-    class ParticleState
+    class CellState
     {
     public:
-        ParticleState() : health(1) {}
-        ParticleState(int base_health) : health(base_health) {}
+        CellState() : health(1) {}
+        CellState(int base_health) : health(base_health) {}
 
-        virtual ~ParticleState() {};
+        virtual ~CellState() {};
 
         /**
          * @brief Set the health of the particle.
@@ -61,17 +61,10 @@ namespace fallingsand
 
         /**
          * @brief Idle update. This should only change the state of THIS PARTICLE!
+         * 
+         * @return True if there was an update this cycle, false otherwise.
          */
-        virtual void update(){};
-
-        /**
-         * @brief Do collision checking on the particle type.
-         *
-         * @param[in] other The other state.
-         * @param[out] my_new_state My new state, that I do operations on!
-         * @param[out] their_new_state Their new state, that I do operations on!
-         */
-        virtual void on_collision(const ParticleState *other, ParticleState *my_new_state, ParticleState *their_new_state) const = 0;
+        virtual bool update() = 0;
 
         /**
          * PROPERTIES
@@ -122,10 +115,36 @@ namespace fallingsand
          */
         virtual int get_falling_speed() const = 0;
 
+        /**
+         * @brief Preform freefalling calculations.
+         * 
+         * @return True if falling, false if now at rest.
+        */
+        virtual bool fall() = 0;
+
+        /**
+         * @brief Set if the particle is in freefall.
+         * 
+         * @param state State to set.
+        */
+        void set_is_falling(bool state){
+            this->is_falling = state;
+        }
+
+        /**
+         * @brief Check if the particle is in freefall.
+         * 
+         * @return True if falling, false if at rest.
+        */
+        bool get_is_falling() const {
+            return this->is_falling;
+        }
+
     private:
         int health;
         int x;
         int y;
+        bool is_falling;
     };
 }
 

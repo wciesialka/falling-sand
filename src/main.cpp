@@ -10,7 +10,7 @@
 
 #include "sandrenderer/Renderer.hpp"
 #include "fallingsand/Simulation.hpp"
-#include "fallingsand/cells/Sand.hpp"
+#include "fallingsand/cells/CellFactory.hpp"
 
 #include <iostream>
 
@@ -20,20 +20,10 @@
 int main(){
     sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH, HEIGHT);
     fallingsand::Simulation* simulation = new fallingsand::Simulation(1, WIDTH, HEIGHT); 
-
-    std::cout << "Renderer and Simulation initialized." << std::endl;
-
     renderer->add_renderable(simulation);
 
-    fallingsand::Sand* sand = new fallingsand::Sand();
-    sand->set_position(10, 10);
-    sand->commit();
-
-    std::cout << "Sand initialized." << std::endl;
-
-    simulation->add_particle(sand);
-
-    std::cout << "Sand added to renderer." << std::endl;
+    fallingsand::CellFactory factory = simulation->get_factory();
+    factory.create(fallingsand::CellType::WALL, 10, 10);
 
     renderer->begin_rendering();
 

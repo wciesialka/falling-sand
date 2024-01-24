@@ -11,9 +11,12 @@
 
 // TODO: Optimize to using chunks, etc.
 
+#include <map>
 #include <vector>
-#include "cells/Particle.hpp"
-#include "ParticleStorage.hpp"
+#include <exception>
+#include "cells/Cell.hpp"
+#include "cells/CellFactory.hpp"
+#include "Chunk.hpp"
 #include "../sandrenderer/Renderable.hpp"
 
 namespace fallingsand
@@ -32,41 +35,35 @@ namespace fallingsand
         {
             this->chunk_width = this->width / this->chunk_count;
             this->chunk_height = this->height / this->chunk_count;
-            this->initialize_storage();
+            this->initialize_chunks();
         }
         ~Simulation()
         {
-            delete this->storage;
+            delete this->matrix;
+            delete[] this->chunks;
         }
 
         virtual void render(sf::RenderWindow &window) const
         {
-            for (unsigned int i = 0; i < this->chunk_count; i++)
-            {
-                this->storage[i]->render(window);
-            }
+            this->matrix->render(window);
         }
 
         /**
-         * @brief Get the particle at a certain position.
+         * @brief Get the cell at a certain position.
          *
          * @param x x-coordinate.
          * @param y y-coordinate.
          *
-         * @return Particle if found, nullptr otherwise.
+         * @return Cell if found, nullptr otherwise.
          */
-        fallingsand::Particle *get_particle(const unsigned int x, const unsigned int y)
+        fallingsand::Cell *get_cell(const unsigned int x, const unsigned int y) const
         {
-            fallingsand::ParticleStorage *chunk = this->get_containing_chunk(x, y);
-            return chunk->get_particle(x, y);
+            return this->matrix->get(x, y);
         }
 
-        /**
-         * @brief Add a particle to the simulation.
-         *
-         * @param particle Particle to add.
-         */
-        void add_particle(fallingsand::Particle *particle);
+        fallingsand::CellFactory get_factory() const {
+            return fallingsand::CellFactory(*(this->matrix));
+        }
 
     private:
         unsigned int chunk_count;
@@ -75,10 +72,12 @@ namespace fallingsand
         unsigned int chunk_width;
         unsigned int chunk_height;
 
+        CellularMatrix* matrix;
+
         /**
-         * @brief Initialize storage buffer.
+         * @brief Initialize chunks.
          */
-        void initialize_storage();
+        void initialize_chunks();
 
         /**
          * @brief Get the chunk containing an x-y coordinate.
@@ -88,9 +87,9 @@ namespace fallingsand
          *
          * @return Chunk containing the x-y coordinate.
          */
-        fallingsand::ParticleStorage *get_containing_chunk(const unsigned int x, const unsigned int y) const;
+        fallingsand::Chunk *get_containing_chunk(const unsigned int x, const unsigned int y) const;
 
-        fallingsand::ParticleStorage **storage;
+        fallingsand::Chunk **chunks;
     };
 }
 

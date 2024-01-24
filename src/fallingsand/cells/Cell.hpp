@@ -9,6 +9,10 @@
 #ifndef FALLINGSAND_CELLS_CELL_H
 #define FALLINGSAND_CELLS_CELL_H
 
+#include <map>
+#include <exception>
+#include "CellType.hpp"
+#include "types/CellState.hpp"
 #include "../../sandrenderer/Renderable.hpp"
 
 namespace fallingsand
@@ -16,22 +20,31 @@ namespace fallingsand
     class Cell : public sandrenderer::Renderable
     {
     public:
-        Cell(sandrenderer::Renderable *renderable) : x(0), y(0), renderable(renderable) {}
-        ~Cell() { delete this->renderable; }
+        Cell(fallingsand::CellType type, fallingsand::CellState* state, sandrenderer::Renderable *renderable) : x(0), y(0), type(type), state(state), renderable(renderable) {}
+        ~Cell() { 
+            delete this->renderable;
+            delete this->state;
+        }
+
+        static fallingsand::Cell* create_cell_from_type(const fallingsand::CellType type);
 
         /**
          * @brief Set the x position of the cell.
          *
          * @param x New x coordinate.
          */
-        virtual void set_x(const int x) = 0;
+        void set_x(const int x) {
+            this->state->set_x(x);
+        }
 
         /**
          * @brief Set the y position of the cell.
          *
          * @param y New y coordinate.
          */
-        virtual void set_y(const int y) = 0;
+        void set_y(const int y) {
+            this->state->set_y(y);
+        };
 
         /**
          * @brief Set the position of the cell.
@@ -50,14 +63,18 @@ namespace fallingsand
          *
          * @returns Cell's x-coordinate.
          */
-        virtual int get_x() const = 0;
+        int get_x() const {
+            return this->state->get_x();
+        }
 
         /**
          * @brief Get the y position of the cell.
          *
          * @returns Cell's y-coordinate.
          */
-        virtual int get_y() const = 0;
+        int get_y() const {
+            return this->state->get_y();
+        };
 
         /**
          * @brief Move the cell by a specific amount.
@@ -80,6 +97,8 @@ namespace fallingsand
     private:
         int x;
         int y;
+        fallingsand::CellType type;
+        fallingsand::CellState* state;
         sandrenderer::Renderable *renderable;
     };
 }
