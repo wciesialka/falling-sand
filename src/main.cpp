@@ -23,8 +23,8 @@ int main(){
     renderer->add_renderable(simulation);
 
     fallingsand::CellFactory* factory = simulation->get_factory();
-    for(int i = 10; i < 100; i++){
-        for(int j = 10; j < 100; j++){
+    for(int i = 0; i < WIDTH; i++){
+        for(int j = 600; j < HEIGHT; j++){
             factory->create(fallingsand::CellType::WALL, i, j);
         }
     }

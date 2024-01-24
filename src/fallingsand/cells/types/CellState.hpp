@@ -78,16 +78,23 @@ namespace fallingsand
          * 
          * @return True if there was an update this cycle, false otherwise.
          */
-        virtual bool update() = 0;
+        bool update() {
+            // First, step. Then, fall.
+            bool change_on_step = this->step();
+            this->set_is_falling(this->fall());
+            return change_on_step || this->get_is_falling();
+        };
+
+        /**
+         * @brief Idle update step. Customizable by different state types.
+         * 
+         * @return True if there was a change this step, false otherwise.
+        */
+        virtual bool step() = 0;
 
         /**
          * PROPERTIES
          */
-
-        /**
-         * @brief Get the falling speed. A particle will look this far ahead.
-         */
-        virtual int get_falling_speed() const = 0;
 
         /**
          * @brief Preform freefalling calculations.

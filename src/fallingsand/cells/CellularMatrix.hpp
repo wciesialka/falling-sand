@@ -95,7 +95,13 @@ namespace fallingsand
             for(auto &kv : *(this->future_state))
             {
                 fallingsand::Cell* cell = kv.second;
+
                 if(chunk.point_within_bounds(cell->get_x(), cell->get_y())){
+                    // Delete empty cells.
+                    if(cell->get_state()->is_dead()){
+                        this->erase(cell->get_x(), cell->get_y());
+                        continue;
+                    }
                     cell->update();
                 }
             }

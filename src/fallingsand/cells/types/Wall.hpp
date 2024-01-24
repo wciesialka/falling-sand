@@ -14,7 +14,7 @@
 namespace fallingsand {
     namespace elements {
         class Wall : public fallingsand::elements::ImmovableCell {
-            virtual bool update() {
+            virtual bool step() {
                 return false;
             }
 
