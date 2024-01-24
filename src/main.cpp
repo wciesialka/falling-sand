@@ -22,10 +22,13 @@ int main(){
     fallingsand::Simulation* simulation = new fallingsand::Simulation(1, WIDTH, HEIGHT); 
     renderer->add_renderable(simulation);
 
-    fallingsand::CellFactory factory = simulation->get_factory();
-    factory.create(fallingsand::CellType::WALL, 10, 10);
-
-    std::cout << "Hi!" << std::endl;
+    fallingsand::CellFactory* factory = simulation->get_factory();
+    for(int i = 10; i < 100; i++){
+        for(int j = 10; j < 100; j++){
+            factory->create(fallingsand::CellType::WALL, i, j);
+        }
+    }
+    simulation->update_all();
 
     renderer->begin_rendering();
 

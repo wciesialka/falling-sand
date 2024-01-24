@@ -101,6 +101,14 @@ namespace fallingsand
             }
         }
 
+        int get_width() const {
+            return this->width;
+        }
+
+        int get_height() const {
+            return this->height;
+        }
+
     private:
         unsigned int form_key(const unsigned int x, const unsigned int y) const
         {

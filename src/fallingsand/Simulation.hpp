@@ -31,21 +31,42 @@ namespace fallingsand
          * @param width Width of simulation.
          * @param height Height of simulation.
          */
-        Simulation(const unsigned int chunk_count, const unsigned int width, const unsigned int height) : chunk_count(chunk_count), width(width), height(height)
+        Simulation(const unsigned int chunk_count, const unsigned int width, const unsigned int height) : chunk_count(chunk_count)
         {
-            this->chunk_width = this->width / this->chunk_count;
-            this->chunk_height = this->height / this->chunk_count;
+            this->matrix = new fallingsand::CellularMatrix(width, height);
+            this->factory = new fallingsand::CellFactory(this->matrix);
             this->initialize_chunks();
         }
         ~Simulation()
         {
-            delete this->matrix;
+            delete this->factory;
             delete[] this->chunks;
+            delete this->matrix;
         }
 
         virtual void render(sf::RenderWindow &window) const
         {
             this->matrix->render(window);
+        }
+
+        int get_width() const {
+            return this->matrix->get_width();
+        }
+
+        int get_height() const {
+            return this->matrix->get_height();
+        }
+
+        int get_chunk_count() const {
+            return this->chunk_count;
+        }
+
+        int get_chunk_width() const {
+            return this->get_width() / this->get_chunk_count();
+        }
+
+        int get_chunk_height() const {
+            return this->get_height() / this->get_chunk_count();
         }
 
         /**
@@ -66,9 +87,9 @@ namespace fallingsand
          *
          * @return Factory for the simulation.
          */
-        fallingsand::CellFactory get_factory() const
+        fallingsand::CellFactory* get_factory() const
         {
-            return fallingsand::CellFactory(*(this->matrix));
+            return this->factory;
         }
 
         /**
@@ -107,10 +128,6 @@ namespace fallingsand
 
     private:
         unsigned int chunk_count;
-        unsigned int width;
-        unsigned int height;
-        unsigned int chunk_width;
-        unsigned int chunk_height;
 
         CellularMatrix *matrix;
 
@@ -130,6 +147,8 @@ namespace fallingsand
         fallingsand::Chunk& get_containing_chunk(const unsigned int x, const unsigned int y) const;
 
         fallingsand::Chunk *chunks;
+
+        fallingsand::CellFactory *factory;
     };
 }
 

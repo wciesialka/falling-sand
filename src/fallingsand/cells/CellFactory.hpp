@@ -18,7 +18,7 @@
 namespace fallingsand {
     class CellFactory {
         public:
-            CellFactory(fallingsand::CellularMatrix& matrix) : matrix(matrix) {};
+            CellFactory(fallingsand::CellularMatrix* matrix) : matrix(matrix) {};
 
             /**
              * @brief Create a Cell corresponoding to the correct type and add it to the matrix.
@@ -35,7 +35,7 @@ namespace fallingsand {
             }
 
         private:
-            fallingsand::CellularMatrix& matrix;
+            fallingsand::CellularMatrix* matrix;
     };
 }
 
