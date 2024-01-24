@@ -85,46 +85,6 @@ namespace fallingsand
          */
 
         /**
-         * @brief Get the state's x-position.
-         *
-         * @return State's x-coordinate.
-         */
-        int get_x() const
-        {
-            return this->x;
-        }
-
-        /**
-         * @brief Get the state's y-position.
-         *
-         * @return State's y-coordinate.
-         */
-        int get_y() const
-        {
-            return this->y;
-        }
-
-        /**
-         * @brief Set the state's x-position.
-         *
-         * @param x New x-position.
-         */
-        void set_x(const int x)
-        {
-            this->x = x;
-        }
-
-        /**
-         * @brief Set the state's y-position.
-         *
-         * @param y New y-position.
-         */
-        void set_y(const int y)
-        {
-            this->y = y;
-        }
-
-        /**
          * @brief Get the falling speed. A particle will look this far ahead.
          */
         virtual int get_falling_speed() const = 0;
@@ -199,14 +159,23 @@ namespace fallingsand
         fallingsand::CellState* get_neighbor(const int dx, const int dy) const;
 
         /**
+         * @brief Set the neighboring cell.
+         * 
+         * @param dx Difference in x-position.
+         * @param dy Difference in y-position.
+         * @param type New cell type.
+         * @param state New cell state.
+        */
+        void set_neighbor(const int dx, const int dy, const fallingsand::CellType type) const;
+        void set_neighbor(const int dx, const int dy, fallingsand::CellState* state) const;
+
+        /**
          * @brief Do nothing.
         */
         void do_nothing() const { return; }
 
     private:
         int health;
-        int x;
-        int y;
         bool is_falling;
 
         fallingsand::Cell* parent;

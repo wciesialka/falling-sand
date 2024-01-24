@@ -11,7 +11,7 @@
 #include <iostream>
 
 void fallingsand::Simulation::initialize_chunks() {
-    this->chunks = new fallingsand::Chunk*[this->chunk_count];
+    this->chunks = new fallingsand::Chunk[this->chunk_count];
     
     // Generate chunks
     unsigned int num_iterations = this->chunk_count * this->chunk_count;
@@ -22,12 +22,12 @@ void fallingsand::Simulation::initialize_chunks() {
         chunk_x = chunk_offset_x * this->chunk_width;
         chunk_y = chunk_offset_y * this->chunk_height;
         
-        fallingsand::Chunk* chunk = new fallingsand::Chunk(this->chunk_width, this->chunk_height, chunk_x, chunk_y);
+        fallingsand::Chunk chunk(this->chunk_width, this->chunk_height, chunk_x, chunk_y);
         this->chunks[chunk_i] = chunk;
     }
 };
 
-fallingsand::Chunk* fallingsand::Simulation::get_containing_chunk(const unsigned int x, const unsigned int y) const {
+fallingsand::Chunk& fallingsand::Simulation::get_containing_chunk(const unsigned int x, const unsigned int y) const {
     unsigned int key = (y / this->chunk_height) + (x / this->chunk_width);
     return this->chunks[key];
 }

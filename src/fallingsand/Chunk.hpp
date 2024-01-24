@@ -14,6 +14,7 @@ namespace fallingsand
     class Chunk
     {
     public:
+        Chunk() : width(0), height(0), x(0), y(0), update_this_frame(false), update_next_frame(false){};
         Chunk(const unsigned int width, const unsigned int height, unsigned int x, unsigned int y)
             : width(width), height(height), x(x), y(y), update_this_frame(true), update_next_frame(false){};
 
@@ -86,7 +87,7 @@ namespace fallingsand
          * 
          * @return True if point is in bounds, false otherwise.
         */
-        bool point_within_bounds(unsigned int x, unsigned int y){
+        bool point_within_bounds(unsigned int x, unsigned int y) const {
             return (x >= this->x && y >= this->y && x < (this->width + this->x) && y < (this->height + this->y));
         }
 

@@ -40,3 +40,13 @@ fallingsand::CellState* fallingsand::Cell::get_neighbor(const int dx, const int 
         return nullptr;
     }
 } 
+
+void fallingsand::Cell::set_neighbor(const int dx, const int dy, fallingsand::Cell* cell) const {
+    try {
+        unsigned int x = this->get_x() + dx;
+        unsigned int y = this->get_y() + dy;
+        this->get_parent()->set(x, y, cell);
+    } catch(std::out_of_range& e) {
+        return;
+    }
+}

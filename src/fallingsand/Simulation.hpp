@@ -26,11 +26,11 @@ namespace fallingsand
     public:
         /**
          * @brief Construct a Simulation.
-         * 
+         *
          * @param chunk_count log2 number of chunks (1 = 1, 2 = 4, 3 = 9, etc.),
          * @param width Width of simulation.
-         * @param height Height of simulation. 
-        */
+         * @param height Height of simulation.
+         */
         Simulation(const unsigned int chunk_count, const unsigned int width, const unsigned int height) : chunk_count(chunk_count), width(width), height(height)
         {
             this->chunk_width = this->width / this->chunk_count;
@@ -61,8 +61,48 @@ namespace fallingsand
             return this->matrix->get(x, y);
         }
 
-        fallingsand::CellFactory get_factory() const {
+        /**
+         * @brief Get a factory that generates cells for this simulation.
+         *
+         * @return Factory for the simulation.
+         */
+        fallingsand::CellFactory get_factory() const
+        {
             return fallingsand::CellFactory(*(this->matrix));
+        }
+
+        /**
+         * @brief Preform a chunk update.
+         *
+         * @param chunk Chunk to update on.
+         */
+        void update(const fallingsand::Chunk &chunk)
+        {
+            this->matrix->update(chunk);
+        }
+
+        /**
+         * @brief Commit changes to the simulation after an update.
+         */
+        void commit()
+        {
+            this->matrix->commit();
+        }
+
+        /**
+         * @brief Update all necessary chunks.
+         */
+        void update_all()
+        {
+            for(int i = 0; i < this->chunk_count; i++){
+                fallingsand::Chunk& chunk = this->chunks[i];
+                if(chunk.shift_update_state()){
+                    this->update(chunk);
+                }
+                // For now, always update every chunk.
+                chunk.queue_update();
+            }
+            this->commit();
         }
 
     private:
@@ -72,7 +112,7 @@ namespace fallingsand
         unsigned int chunk_width;
         unsigned int chunk_height;
 
-        CellularMatrix* matrix;
+        CellularMatrix *matrix;
 
         /**
          * @brief Initialize chunks.
@@ -87,9 +127,9 @@ namespace fallingsand
          *
          * @return Chunk containing the x-y coordinate.
          */
-        fallingsand::Chunk *get_containing_chunk(const unsigned int x, const unsigned int y) const;
+        fallingsand::Chunk& get_containing_chunk(const unsigned int x, const unsigned int y) const;
 
-        fallingsand::Chunk **chunks;
+        fallingsand::Chunk *chunks;
     };
 }
 

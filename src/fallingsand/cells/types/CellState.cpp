@@ -16,3 +16,11 @@ fallingsand::CellType fallingsand::CellState::get_type() const {
 fallingsand::CellState* fallingsand::CellState::get_neighbor(const int dx, const int dy) const {
     return this->get_parent()->get_neighbor(dx, dy);
 }
+
+void fallingsand::CellState::set_neighbor(const int dx, const int dy, const fallingsand::CellType type) const{
+    this->get_parent()->set_neighbor(dx, dy, type);
+}
+
+void fallingsand::CellState::set_neighbor(const int dx, const int dy, fallingsand::CellState* state) const {
+    this->get_parent()->set_neighbor(dx, dy, state);
+}
