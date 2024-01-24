@@ -8,6 +8,7 @@
 
 #include <exception>
 #include "Cell.hpp"
+#include "CellularMatrix.hpp"
 #include "../../sandrenderer/Pixel.hpp"
 
 #include "types/Wall.hpp"
@@ -28,3 +29,14 @@ fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::C
     cell = new fallingsand::Cell(type, state, pixel);
     return cell;
 }
+
+fallingsand::CellState* fallingsand::Cell::get_neighbor(const int dx, const int dy) const 
+{
+    try {
+        unsigned int x = this->get_x() + dx;
+        unsigned int y = this->get_y() + dy;
+        return this->get_parent()->get(x, y)->get_state();
+    } catch(std::out_of_range& e) {
+        return nullptr;
+    }
+} 

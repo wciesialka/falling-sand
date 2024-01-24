@@ -17,6 +17,11 @@ namespace fallingsand {
             virtual bool update() {
                 return false;
             }
+
+            virtual bool act_upon(fallingsand::CellState* other) {
+                other->do_nothing();
+                return false;
+            }
         };
     }
 }

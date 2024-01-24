@@ -17,23 +17,30 @@
 
 namespace fallingsand
 {
+
+    class CellularMatrix;
+
     class Cell : public sandrenderer::Renderable
     {
     public:
-        Cell(fallingsand::CellType type, fallingsand::CellState* state, sandrenderer::Renderable *renderable) : x(0), y(0), type(type), state(state), renderable(renderable) {}
-        ~Cell() { 
+        Cell(fallingsand::CellType type, fallingsand::CellState *state, sandrenderer::Renderable *renderable) : x(0), y(0), type(type), renderable(renderable) {
+            this->set_state(state);
+        }
+        ~Cell()
+        {
             delete this->renderable;
             delete this->state;
         }
 
-        static fallingsand::Cell* create_cell_from_type(const fallingsand::CellType type);
+        static fallingsand::Cell *create_cell_from_type(const fallingsand::CellType type);
 
         /**
          * @brief Set the x position of the cell.
          *
          * @param x New x coordinate.
          */
-        void set_x(const int x) {
+        void set_x(const int x)
+        {
             this->state->set_x(x);
         }
 
@@ -42,7 +49,8 @@ namespace fallingsand
          *
          * @param y New y coordinate.
          */
-        void set_y(const int y) {
+        void set_y(const int y)
+        {
             this->state->set_y(y);
         };
 
@@ -63,7 +71,8 @@ namespace fallingsand
          *
          * @returns Cell's x-coordinate.
          */
-        int get_x() const {
+        int get_x() const
+        {
             return this->state->get_x();
         }
 
@@ -72,7 +81,8 @@ namespace fallingsand
          *
          * @returns Cell's y-coordinate.
          */
-        int get_y() const {
+        int get_y() const
+        {
             return this->state->get_y();
         };
 
@@ -94,12 +104,72 @@ namespace fallingsand
             this->renderable->render(window);
         }
 
+        /**
+         * @brief Set the parent matrix.
+         *
+         * @param parent New parent matrix.
+         */
+        void set_parent(fallingsand::CellularMatrix *parent)
+        {
+            this->parent = parent;
+        }
+
+        /**
+         * @brief Get the parent matrix.
+         *
+         * @return Parent matrix.
+         */
+        fallingsand::CellularMatrix *get_parent() const
+        {
+            return this->parent;
+        }
+
+        /**
+         * @brief Get the type of this cell.
+         * 
+         * @return Cell type.
+        */
+        fallingsand::CellType get_type() const {
+            return this->type;
+        }
+
+        /**
+         * @brief Get the state of a neighboring cell.
+         * 
+         * @param dx Difference in x-position.
+         * @param dy Difference in y-position.
+         * 
+         * @return Cell's state if found, nullptr otherwise.
+        */
+        fallingsand::CellState* get_neighbor(const int dx, const int dy) const; 
+
+        /**
+         * @brief Get the state of the cell.
+         * 
+         * @return Cell's state.
+        */
+        fallingsand::CellState* get_state() const {
+            return this->state;
+        }
+
     private:
+        /**
+         * @brief Set the state of the cell.
+         * 
+         * @param state New cell state.
+        */
+        void set_state(fallingsand::CellState* state){
+            this->state = state;
+            state->set_parent(this);
+        }
+
         int x;
         int y;
         fallingsand::CellType type;
-        fallingsand::CellState* state;
+        fallingsand::CellState *state;
         sandrenderer::Renderable *renderable;
+
+        fallingsand::CellularMatrix *parent;
     };
 }
 

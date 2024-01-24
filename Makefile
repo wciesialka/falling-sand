@@ -24,7 +24,7 @@ BDIR = ./build
 SOURCE_PATHS = $(shell find $(SDIR) -iname "*.cpp")
 
 # Sources/Build Object paths
-CLASSES = main sandrenderer/Pixel sandrenderer/Renderer fallingsand/Simulation fallingsand/cells/Cell fallingsand/cells/CellFactory
+CLASSES = main sandrenderer/Pixel sandrenderer/Renderer fallingsand/Simulation fallingsand/cells/Cell fallingsand/cells/CellFactory fallingsand/cells/types/CellState
 OBJECTS = $(addprefix $(BDIR)/,$(addsuffix .o, $(CLASSES)))
 
 .PHONY: all run clean

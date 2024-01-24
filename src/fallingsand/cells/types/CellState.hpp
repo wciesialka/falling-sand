@@ -11,8 +11,13 @@
 #ifndef FALLINGSAND_CELLS_TYPES_CELLSTATE_H
 #define FALLINGSAND_CELLS_TYPES_CELLSTATE_H
 
+#include "../CellType.hpp"
+#include <exception>
+
 namespace fallingsand
 {
+    class Cell;
+
     class CellState
     {
     public:
@@ -47,6 +52,15 @@ namespace fallingsand
         void kill()
         {
             this->set_health(0);
+        }
+
+        /**
+         * @brief Damage the particle by a certain amount.
+         * 
+         * @param damage_amount Amount to damage by.
+        */
+        void damage(int damage_amount) {
+            this->set_health(this->get_health() - damage_amount);
         }
 
         /**
@@ -140,11 +154,62 @@ namespace fallingsand
             return this->is_falling;
         }
 
+        /**
+         * @brief Act upon another cell state.
+         * 
+         * @param[in,out] other State of other cell. Use potential
+         *                      states to avoid updating in-place!
+         * @return true if there was an update to either cell, false otherwise. 
+        */
+        virtual bool act_upon(fallingsand::CellState* other) = 0;
+
+        /**
+         * @brief Set parent cell.
+         * 
+         * @param parent New parent.
+        */
+        void set_parent(fallingsand::Cell* parent){
+            this->parent = parent;
+        }
+
+        /**
+         * @brief Get parent cell.
+         * 
+         * @return Parent cell.
+        */
+        fallingsand::Cell* get_parent() const {
+            return this->parent;
+        }
+
+        /**
+         * @brief Get type of cell.
+         * 
+         * @return Cell type.
+        */
+        fallingsand::CellType get_type() const;
+
+        /**
+         * @brief Get a neighboring cell's state.
+         * 
+         * @param dx Difference of x values.
+         * @param dy Difference of y values.
+         * 
+         * @return State of neighboring cell if found, nullptr otherwise.
+        */
+        fallingsand::CellState* get_neighbor(const int dx, const int dy) const;
+
+        /**
+         * @brief Do nothing.
+        */
+        void do_nothing() const { return; }
+
     private:
         int health;
         int x;
         int y;
         bool is_falling;
+
+        fallingsand::Cell* parent;
     };
 }
 

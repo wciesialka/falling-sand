@@ -25,6 +25,8 @@ int main(){
     fallingsand::CellFactory factory = simulation->get_factory();
     factory.create(fallingsand::CellType::WALL, 10, 10);
 
+    std::cout << "Hi!" << std::endl;
+
     renderer->begin_rendering();
 
     delete renderer;
