@@ -27,7 +27,7 @@ namespace fallingsand
         {
             this->set_state(state);
         }
-        Cell(const fallingsand::Cell &cell)
+        Cell(const fallingsand::Cell &cell) : sandrenderer::Renderable()
         {
             this->set_type(cell.get_type());
             this->set_state(cell.get_state());

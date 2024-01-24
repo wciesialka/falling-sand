@@ -94,7 +94,7 @@ namespace fallingsand
          */
         void update_all()
         {
-            for(int i = 0; i < this->chunk_count; i++){
+            for(unsigned int i = 0; i < this->chunk_count; i++){
                 fallingsand::Chunk& chunk = this->chunks[i];
                 if(chunk.shift_update_state()){
                     this->update(chunk);
