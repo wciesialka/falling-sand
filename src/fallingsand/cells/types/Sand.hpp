@@ -16,11 +16,11 @@ namespace fallingsand {
         class Sand : public fallingsand::elements::MovableCell {
 
             virtual int get_falling_speed() const {
-                return 1;
+                return 3;
             }
 
             virtual unsigned int get_falling_dx() const {
-                return 3;
+                return 1;
             }
             
             virtual bool step() {
@@ -30,6 +30,10 @@ namespace fallingsand {
             virtual bool act_upon(fallingsand::CellState* other) {
                 other->do_nothing();
                 return false;
+            }
+
+            virtual fallingsand::elements::Sand* clone() const {
+                return new fallingsand::elements::Sand(*this);
             }
         };
     }

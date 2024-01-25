@@ -7,7 +7,7 @@
 */
 
 #include "CellState.hpp"
-#include "../Cell.hpp"
+#include "Cell.hpp"
 
 fallingsand::CellType fallingsand::CellState::get_type() const {
     return this->get_parent()->get_type();
@@ -23,4 +23,8 @@ void fallingsand::CellState::set_neighbor(const int dx, const int dy, const fall
 
 void fallingsand::CellState::set_neighbor(const int dx, const int dy, fallingsand::CellState* state) const {
     this->get_parent()->set_neighbor(dx, dy, state);
+}
+
+void fallingsand::CellState::move(const int dx, const int dy) const {
+    this->get_parent()->move(dx, dy);
 }

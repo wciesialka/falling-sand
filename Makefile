@@ -11,7 +11,7 @@ EXEC = sand
 CC = g++
 
 # Debug mode. Uncomment to enable debug
- DEBUG=-g
+DEBUG=-g
 
 # Compiler flags
 CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Werror $(DEBUG)

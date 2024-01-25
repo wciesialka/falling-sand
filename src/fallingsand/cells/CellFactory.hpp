@@ -29,9 +29,9 @@ namespace fallingsand {
              * 
              * @return Created cell
             */
-            fallingsand::Cell* create(const fallingsand::CellType type, const int x, const int y) const;
-            fallingsand::Cell* create(const fallingsand::CellType type) const {
-                return this->create(type, 0, 0);
+            void create(const fallingsand::CellType type, const int x, const int y) const;
+            void create(const fallingsand::CellType type) const {
+                this->create(type, 0, 0);
             }
 
         private:

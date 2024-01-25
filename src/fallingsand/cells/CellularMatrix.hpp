@@ -34,12 +34,15 @@ namespace fallingsand
             delete this->future_state;
         }
 
-        Cell *get(const unsigned int x, const unsigned int y) const
+        Cell *get(const unsigned int x, const unsigned int y)
         {
+            // Acquire read-lock.
+            std::lock_guard<std::mutex> lock(this->read_lock);
+
             unsigned int key = this->form_key(x, y);
             try
             {
-                return this->future_state->at(key);
+                return this->current_state->at(key);
             }
             catch (const std::out_of_range &e)
             {
@@ -54,9 +57,15 @@ namespace fallingsand
          * @param y y-coordinate
          * @param cell Cell
          */
-        void set(const unsigned int x, const unsigned int y, Cell *cell)
+        void set(const unsigned int x, const unsigned int y, fallingsand::Cell *cell)
         {
-            unsigned int key = this->form_key(x, y);
+            // If setting oob, we just return early, killing off the OOB cell.
+            unsigned int key;
+            try {
+                key = this->form_key(x, y);
+            } catch (const std::out_of_range& e){
+                return;
+            }
             (*(this->future_state))[key] = cell;
             cell->set_parent(this);
             cell->set_position(x, y);
@@ -76,9 +85,12 @@ namespace fallingsand
         void render(sf::RenderWindow &window)
         {
             // Acquire render-lock
-            std::lock_guard<std::mutex> lock(this->render_lock);
+            std::lock_guard<std::mutex> lock(this->read_lock);
             for (auto &kv : *(this->current_state))
             {
+                if(kv.second->get_state()->is_dead()){
+                    continue;
+                }
                 kv.second->render(window);
             }
         }
@@ -89,7 +101,7 @@ namespace fallingsand
         void commit()
         {
             // Acquire render-lock.
-            std::lock_guard<std::mutex> lock(this->render_lock);
+            std::lock_guard<std::mutex> lock(this->read_lock);
             
             // Copy future state onto current state.
             delete this->current_state;
@@ -97,7 +109,7 @@ namespace fallingsand
         }
 
         void update(const fallingsand::Chunk& chunk){
-            for(auto &kv : *(this->future_state))
+            for(auto &kv : *(this->current_state))
             {
                 fallingsand::Cell* cell = kv.second;
 
@@ -132,7 +144,7 @@ namespace fallingsand
 
         unsigned int width;
         unsigned int height;
-        std::mutex render_lock;
+        std::mutex read_lock;
         fallingsand::CellMap *current_state;
         fallingsand::CellMap *future_state;
     };

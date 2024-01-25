@@ -22,6 +22,10 @@ namespace fallingsand {
                 other->do_nothing();
                 return false;
             }
+
+            virtual fallingsand::elements::Wall* clone() const {
+                return new fallingsand::elements::Wall(*this);
+            }
         };
     }
 }

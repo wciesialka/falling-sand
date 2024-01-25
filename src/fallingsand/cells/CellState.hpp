@@ -1,6 +1,6 @@
 /**
- * @file ParticleType.hpp
- * @brief Contains declerations for the ParticleType ABC, which handles simulation details.
+ * @file CellState.hpp
+ * @brief Contains declerations for the CellState ABC, which handles simulation details.
  *
  * This is a poorly named state.
  *
@@ -11,7 +11,8 @@
 #ifndef FALLINGSAND_CELLS_TYPES_CELLSTATE_H
 #define FALLINGSAND_CELLS_TYPES_CELLSTATE_H
 
-#include "../CellType.hpp"
+#include "CellType.hpp"
+#include "CellData.hpp"
 #include <exception>
 
 namespace fallingsand
@@ -21,10 +22,46 @@ namespace fallingsand
     class CellState
     {
     public:
-        CellState() : health(1) {}
-        CellState(int base_health) : health(base_health) {}
+        CellState() {}
+        CellState(CellData initial_data) : data(initial_data) {}
+        CellState(const CellState& other) {
+            this->set_data(other.get_data());
+        }
 
-        virtual ~CellState() {};
+        virtual ~CellState() {}
+
+        /**
+         * @brief Move the cell by a certain amount.
+         * 
+         * @param dx Change in x-position
+         * @param dy Change in y-position
+        */
+        void move(const int dx, const int dy) const;
+
+        /**
+         * @brief Clone the current state. This is a necessary function.
+         * 
+         * @return Clone of the current state.
+        */
+        virtual CellState* clone() const = 0;
+
+        /**
+         * @brief Get cell's data.
+         * 
+         * @return Cell's data.
+        */
+        fallingsand::CellData get_data() const {
+            return this->data;
+        }
+
+        /**
+         * @brief Set the cell's data directly.
+         * 
+         * @param data New data.
+        */
+        void set_data(const fallingsand::CellData data) {
+            this->data = data;
+        }
 
         /**
          * @brief Set the health of the particle.
@@ -33,7 +70,7 @@ namespace fallingsand
          */
         void set_health(int health)
         {
-            this->health = health;
+            this->data.health = health;
         }
 
         /**
@@ -43,7 +80,7 @@ namespace fallingsand
          */
         int get_health() const
         {
-            return this->health;
+            return this->data.health;
         }
 
         /**
@@ -79,6 +116,7 @@ namespace fallingsand
          * @return True if there was an update this cycle, false otherwise.
          */
         bool update() {
+            this->data.lifetime++;
             // First, step. Then, fall.
             bool change_on_step = this->step();
             this->set_is_falling(this->fall());
@@ -186,6 +224,7 @@ namespace fallingsand
         bool is_falling;
 
         fallingsand::Cell* parent;
+        fallingsand::CellData data;
     };
 }
 

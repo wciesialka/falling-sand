@@ -8,7 +8,7 @@
  * @author Willow Ciesialka
 */
 
-#include <unistd.h>
+#include <chrono>
 #include <thread>
 
 #include "sandrenderer/Renderer.hpp"
@@ -18,8 +18,12 @@
 #define WIDTH 640
 #define HEIGHT 640
 
-void start_rendering(sandrenderer::Renderer* renderer){
+const int TICK_RATE = 20;
+
+void start_rendering(sandrenderer::Renderer* renderer, volatile bool &rendering_state){
+    rendering_state = true;
     renderer->begin_rendering();
+    rendering_state = false;
 }
 
 int main(){
@@ -28,21 +32,15 @@ int main(){
     renderer->add_renderable(simulation);
 
     fallingsand::CellFactory* factory = simulation->get_factory();
-    for(int i = 0; i < WIDTH; i++){
-        for(int j = 600; j < HEIGHT; j++){
-            factory->create(fallingsand::CellType::WALL, i, j);
-        }
-    }
-    factory->create(fallingsand::CellType::SAND, 300, 10);
-    simulation->update_all();
+    factory->create(fallingsand::CellType::SAND, 300, 639);
+    simulation->commit();
 
-    const int TICK_RATE = (1/60) * 1000;
+    volatile bool rendering_state = true;
+    std::thread render_thread(start_rendering, renderer, std::ref(rendering_state));
 
-    std::thread render_thread(start_rendering, renderer);
-
-    while(!render_thread.joinable()){
-        usleep(TICK_RATE);
+    while(rendering_state){
         simulation->update_all();
+        std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE));
     }
     render_thread.join();
 

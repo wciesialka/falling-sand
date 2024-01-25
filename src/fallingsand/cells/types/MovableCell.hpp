@@ -9,7 +9,7 @@
 #ifndef FALLINGSAND_CELLS_TYPES_MOVABLECELL_H
 #define FALLINGSAND_CELLS_TYPES_MOVABLECELL_H
 
-#include "CellState.hpp"
+#include "../CellState.hpp"
 
 namespace fallingsand {
     namespace elements {

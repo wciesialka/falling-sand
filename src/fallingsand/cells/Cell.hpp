@@ -12,7 +12,7 @@
 #include <map>
 #include <exception>
 #include "CellType.hpp"
-#include "types/CellState.hpp"
+#include "CellState.hpp"
 #include "../../sandrenderer/Renderable.hpp"
 
 namespace fallingsand
@@ -30,7 +30,7 @@ namespace fallingsand
         Cell(const fallingsand::Cell &cell) : sandrenderer::Renderable()
         {
             this->set_type(cell.get_type());
-            this->set_state(cell.get_state());
+            this->set_state(cell.get_state()->clone());
             this->set_renderable(cell.get_renderable());
         }
         ~Cell()
@@ -96,13 +96,14 @@ namespace fallingsand
         /**
          * @brief Move the cell by a specific amount.
          *
-         * @param x Change in x position.
-         * @param y Change in y position.
+         * @param dx Change in x position.
+         * @param dy Change in y position.
          */
-        void move(const int x, const int y)
+        void move(const int dx, const int dy)
         {
-            this->set_x(this->get_x() + x);
-            this->set_y(this->get_y() + y);
+            fallingsand::Cell* copy = new fallingsand::Cell(*this);
+            this->set_neighbor(dx, dy, copy);
+            this->get_state()->kill();
         }
 
         virtual void render(sf::RenderWindow &window) const
@@ -173,7 +174,7 @@ namespace fallingsand
         };
         void set_neighbor(const int dx, const int dy, fallingsand::CellType type) const
         {
-            fallingsand::Cell *new_cell = fallingsand::Cell::create_cell_from_type(type);
+            fallingsand::Cell* new_cell = fallingsand::Cell::create_cell_from_type(type);
             this->set_neighbor(dx, dy, new_cell);
         };
 
