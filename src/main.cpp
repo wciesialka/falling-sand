@@ -8,14 +8,19 @@
  * @author Willow Ciesialka
 */
 
+#include <unistd.h>
+#include <thread>
+
 #include "sandrenderer/Renderer.hpp"
 #include "fallingsand/Simulation.hpp"
 #include "fallingsand/cells/CellFactory.hpp"
 
-#include <iostream>
-
 #define WIDTH 640
 #define HEIGHT 640
+
+void start_rendering(sandrenderer::Renderer* renderer){
+    renderer->begin_rendering();
+}
 
 int main(){
     sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH, HEIGHT);
@@ -31,9 +36,16 @@ int main(){
     factory->create(fallingsand::CellType::SAND, 300, 10);
     simulation->update_all();
 
-    renderer->begin_rendering();
+    const int TICK_RATE = (1/60) * 1000;
 
-    delete renderer;
+    std::thread render_thread(start_rendering, renderer);
+
+    while(!render_thread.joinable()){
+        usleep(TICK_RATE);
+        simulation->update_all();
+    }
+    render_thread.join();
+
     delete simulation;
 
     return 0;

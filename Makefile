@@ -10,11 +10,15 @@ EXEC = sand
 # Compiler command
 CC = g++
 
+# Debug mode. Uncomment to enable debug
+ DEBUG=-g
+
 # Compiler flags
-CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Werror
+CFLAGS = -std=c++11 -Wall -Wextra -Wpedantic -Werror $(DEBUG)
 
 # Linker flags
-LFLAGS = -lsfml-graphics -lsfml-window -lsfml-system
+LIBS = sfml-graphics sfml-window sfml-system pthread
+LFLAGS = $(addprefix -l, $(LIBS))
 
 # Source/Build Directories
 SDIR = ./src

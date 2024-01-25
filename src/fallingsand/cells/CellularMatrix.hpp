@@ -12,13 +12,14 @@
 #include "Cell.hpp"
 #include "../Chunk.hpp"
 #include <iostream>
+#include <mutex>
 
 namespace fallingsand
 {
 
     typedef std::map<unsigned int, fallingsand::Cell *> CellMap;
 
-    class CellularMatrix : public sandrenderer::Renderable
+    class CellularMatrix
     {
     public:
         CellularMatrix(const unsigned int width, const unsigned int height) : width(width), height(height)
@@ -72,8 +73,10 @@ namespace fallingsand
             this->future_state->erase(key);
         }
 
-        virtual void render(sf::RenderWindow &window) const
+        void render(sf::RenderWindow &window)
         {
+            // Acquire render-lock
+            std::lock_guard<std::mutex> lock(this->render_lock);
             for (auto &kv : *(this->current_state))
             {
                 kv.second->render(window);
@@ -85,10 +88,12 @@ namespace fallingsand
          */
         void commit()
         {
-            *(this->current_state) = *(this->future_state);
-            delete this->future_state;
-            this->future_state = new CellMap;
-            *(this->future_state) = *(this->current_state);
+            // Acquire render-lock.
+            std::lock_guard<std::mutex> lock(this->render_lock);
+            
+            // Copy future state onto current state.
+            delete this->current_state;
+            this->current_state = new CellMap(this->future_state->begin(), this->future_state->end());
         }
 
         void update(const fallingsand::Chunk& chunk){
@@ -127,6 +132,7 @@ namespace fallingsand
 
         unsigned int width;
         unsigned int height;
+        std::mutex render_lock;
         fallingsand::CellMap *current_state;
         fallingsand::CellMap *future_state;
     };
