@@ -29,7 +29,6 @@ namespace sandrenderer
 
         ~Renderer(){
             delete this->window;
-            delete this->renderables;
         }
 
         /**
@@ -64,6 +63,10 @@ namespace sandrenderer
         }
 
         void begin_rendering() const;
+
+        bool is_open() {
+            return this->get_window()->get_window().isOpen();
+        }
 
     private:
         sandrenderer::Window *window;

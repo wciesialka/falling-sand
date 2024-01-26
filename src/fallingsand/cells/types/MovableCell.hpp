@@ -15,6 +15,7 @@ namespace fallingsand {
     namespace elements {
         class MovableCell : public fallingsand::CellState {
             public:
+                MovableCell(const CellData data) : fallingsand::CellState(data) {}
                 /**
                  * @brief Get the falling speed. A particle will look this far ahead.
                  */

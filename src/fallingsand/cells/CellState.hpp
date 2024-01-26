@@ -22,11 +22,7 @@ namespace fallingsand
     class CellState
     {
     public:
-        CellState() {}
-        CellState(CellData initial_data) : data(initial_data) {}
-        CellState(const CellState& other) {
-            this->set_data(other.get_data());
-        }
+        CellState(const CellData initial_data) : data(initial_data) {}
 
         virtual ~CellState() {}
 
@@ -158,15 +154,6 @@ namespace fallingsand
         bool get_is_falling() const {
             return this->is_falling;
         }
-
-        /**
-         * @brief Act upon another cell state.
-         * 
-         * @param[in,out] other State of other cell. Use potential
-         *                      states to avoid updating in-place!
-         * @return true if there was an update to either cell, false otherwise. 
-        */
-        virtual bool act_upon(fallingsand::CellState* other) = 0;
 
         /**
          * @brief Set parent cell.

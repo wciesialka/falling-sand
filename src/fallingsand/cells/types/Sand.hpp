@@ -14,6 +14,8 @@
 namespace fallingsand {
     namespace elements {
         class Sand : public fallingsand::elements::MovableCell {
+            public:
+            Sand(const CellData data = CellData()) : fallingsand::elements::MovableCell(data) {}
 
             virtual int get_falling_speed() const {
                 return 3;
@@ -27,13 +29,8 @@ namespace fallingsand {
                 return false;
             }
 
-            virtual bool act_upon(fallingsand::CellState* other) {
-                other->do_nothing();
-                return false;
-            }
-
             virtual fallingsand::elements::Sand* clone() const {
-                return new fallingsand::elements::Sand(*this);
+                return new fallingsand::elements::Sand(this->get_data());
             }
         };
     }

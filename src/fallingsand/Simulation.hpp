@@ -97,9 +97,9 @@ namespace fallingsand
          *
          * @param chunk Chunk to update on.
          */
-        void update(const fallingsand::Chunk &chunk)
+        bool update(const fallingsand::Chunk &chunk)
         {
-            this->matrix->update(chunk);
+            return this->matrix->update(chunk);
         }
 
         /**
@@ -115,13 +115,14 @@ namespace fallingsand
          */
         void update_all()
         {
-            for(unsigned int i = 0; i < this->chunk_count; i++){
+            // Update bottom-up
+            for(int i = this->chunk_count-1; i >= 0; i--){
                 fallingsand::Chunk& chunk = this->chunks[i];
                 if(chunk.shift_update_state()){
-                    this->update(chunk);
+                    if(this->update(chunk)){
+                        chunk.queue_update();
+                    }
                 }
-                // For now, always update every chunk.
-                chunk.queue_update();
             }
             this->commit();
         }

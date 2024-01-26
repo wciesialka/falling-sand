@@ -21,10 +21,6 @@ void fallingsand::CellState::set_neighbor(const int dx, const int dy, const fall
     this->get_parent()->set_neighbor(dx, dy, type);
 }
 
-void fallingsand::CellState::set_neighbor(const int dx, const int dy, fallingsand::CellState* state) const {
-    this->get_parent()->set_neighbor(dx, dy, state);
-}
-
 void fallingsand::CellState::move(const int dx, const int dy) const {
     this->get_parent()->move(dx, dy);
 }

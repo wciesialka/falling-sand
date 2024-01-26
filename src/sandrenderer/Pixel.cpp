@@ -13,12 +13,16 @@
 void sandrenderer::Pixel::render(sf::RenderWindow& window) const{
     sf::Vector2u size = window.getSize();
     sf::Vector2f pos = this->get_render_position();
+    int x = pos.x * sandrenderer::Pixel::ACTUAL_SIZE;
+    int y = pos.y * sandrenderer::Pixel::ACTUAL_SIZE;
+    int width = (int)(size.x);
+    int height = (int)(size.y);
     // If OOB, don't bother rendering.
-    if(pos.x < 0 || pos.x > size.x || pos.y < 0 || pos.y > size.y){
+    if(x < 0 || x > width || y < 0 || y > height){
         return;
     }
-    sf::Vertex pixel;
-    pixel.position = this->get_render_position();
-    pixel.color = this->get_color();
-    window.draw(&pixel, 1, sf::Points);
+    sf::RectangleShape rect(sf::Vector2f(sandrenderer::Pixel::ACTUAL_SIZE, sandrenderer::Pixel::ACTUAL_SIZE));
+    rect.setFillColor(this->get_color());
+    rect.setPosition(sf::Vector2f(x, y));
+    window.draw(rect);
 }

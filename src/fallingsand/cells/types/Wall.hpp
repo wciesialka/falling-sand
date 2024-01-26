@@ -14,17 +14,15 @@
 namespace fallingsand {
     namespace elements {
         class Wall : public fallingsand::elements::ImmovableCell {
+            public:
+            Wall(const CellData data = CellData()) : fallingsand::elements::ImmovableCell(data) {}
+
             virtual bool step() {
                 return false;
             }
 
-            virtual bool act_upon(fallingsand::CellState* other) {
-                other->do_nothing();
-                return false;
-            }
-
             virtual fallingsand::elements::Wall* clone() const {
-                return new fallingsand::elements::Wall(*this);
+                return new fallingsand::elements::Wall(this->get_data());
             }
         };
     }

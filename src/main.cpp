@@ -12,37 +12,40 @@
 #include <thread>
 
 #include "sandrenderer/Renderer.hpp"
+#include "sandrenderer/Pixel.hpp"
 #include "fallingsand/Simulation.hpp"
 #include "fallingsand/cells/CellFactory.hpp"
 
-#define WIDTH 640
-#define HEIGHT 640
+#define WIDTH 100
+#define HEIGHT 100
 
 const int TICK_RATE = 20;
 
-void start_rendering(sandrenderer::Renderer* renderer, volatile bool &rendering_state){
-    rendering_state = true;
+void start_rendering(sandrenderer::Renderer* renderer){
     renderer->begin_rendering();
-    rendering_state = false;
 }
 
 int main(){
-    sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH, HEIGHT);
+    sandrenderer::Renderer* renderer = new sandrenderer::Renderer(WIDTH * sandrenderer::Pixel::ACTUAL_SIZE, HEIGHT * sandrenderer::Pixel::ACTUAL_SIZE);
     fallingsand::Simulation* simulation = new fallingsand::Simulation(1, WIDTH, HEIGHT); 
     renderer->add_renderable(simulation);
 
     fallingsand::CellFactory* factory = simulation->get_factory();
-    factory->create(fallingsand::CellType::SAND, 300, 639);
+    for(int i = 0; i < WIDTH; i++){
+        for(int j = HEIGHT-2; j < HEIGHT; j++){
+            factory->create(fallingsand::CellType::WALL, i, j);
+        }
+    }
+    
     simulation->commit();
 
-    volatile bool rendering_state = true;
-    std::thread render_thread(start_rendering, renderer, std::ref(rendering_state));
+    sf::Thread render_thread(&start_rendering, renderer);
+    render_thread.launch();
 
-    while(rendering_state){
+    while(renderer->is_open()){
         simulation->update_all();
         std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE));
     }
-    render_thread.join();
 
     delete simulation;
 

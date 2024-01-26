@@ -20,6 +20,7 @@ namespace sandrenderer
     class Pixel : public sandrenderer::Renderable
     {
     public:
+        static const int ACTUAL_SIZE = 5;
         /**
          * Constructor for the Pixel renderable.
          */
@@ -30,6 +31,8 @@ namespace sandrenderer
         Pixel(sf::Vector2f position, int r, int g, int b) : sandrenderer::Renderable(position), color(sf::Color(r, g, b)) {};
         Pixel(int x, int y, sf::Color color) : sandrenderer::Renderable(x, y), color(color) {};
         Pixel(int x, int y, int r, int g, int b) : sandrenderer::Renderable(x, y), color(sf::Color(r, g, b)) {};
+
+
 
         /**
          * @brief Set the color of the pixel on the screen.

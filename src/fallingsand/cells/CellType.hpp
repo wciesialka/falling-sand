@@ -13,7 +13,8 @@ namespace fallingsand {
     enum CellType {
         EMPTY,
         SAND,
-        WALL
+        WALL,
+        WATER
     };
 }
 

@@ -23,16 +23,8 @@ namespace fallingsand
     class Cell : public sandrenderer::Renderable
     {
     public:
-        Cell(fallingsand::CellType type, fallingsand::CellState *state, sandrenderer::Renderable *renderable) : x(0), y(0), type(type), renderable(renderable)
-        {
-            this->set_state(state);
-        }
-        Cell(const fallingsand::Cell &cell) : sandrenderer::Renderable()
-        {
-            this->set_type(cell.get_type());
-            this->set_state(cell.get_state()->clone());
-            this->set_renderable(cell.get_renderable());
-        }
+        Cell(fallingsand::CellType type, sandrenderer::Renderable *renderable) : x(0), y(0), type(type), renderable(renderable)
+        {}
         ~Cell()
         {
             delete this->renderable;
@@ -101,9 +93,23 @@ namespace fallingsand
          */
         void move(const int dx, const int dy)
         {
-            fallingsand::Cell* copy = new fallingsand::Cell(*this);
+            fallingsand::Cell* copy = fallingsand::Cell::create_cell_from_type(this->get_type());
+            fallingsand::CellState* state = this->get_state()->clone();
+            copy->set_state(state);
             this->set_neighbor(dx, dy, copy);
             this->get_state()->kill();
+        }
+
+        /**
+         * @brief Get a copy of the Cell.
+         * 
+         * @return Copy of the cell.
+        */
+        fallingsand::Cell* copy() const {
+            fallingsand::Cell* copy = fallingsand::Cell::create_cell_from_type(this->get_type());
+            fallingsand::CellState* state = this->get_state()->clone();
+            copy->set_state(state);
+            return copy;
         }
 
         virtual void render(sf::RenderWindow &window) const
@@ -145,9 +151,9 @@ namespace fallingsand
         /**
          * @brief Do an update step.
          */
-        void update()
+        bool update()
         {
-            this->get_state()->update();
+            return this->get_state()->update();
         }
 
         /**
@@ -168,10 +174,6 @@ namespace fallingsand
          * @param cell Cell to set.
          */
         void set_neighbor(const int dx, const int dy, fallingsand::Cell *cell) const;
-        void set_neighbor(const int dx, const int dy, fallingsand::CellState *state) const
-        {
-            this->set_neighbor(dx, dy, state->get_parent());
-        };
         void set_neighbor(const int dx, const int dy, fallingsand::CellType type) const
         {
             fallingsand::Cell* new_cell = fallingsand::Cell::create_cell_from_type(type);

@@ -30,15 +30,14 @@ namespace fallingsand
 
         ~CellularMatrix()
         {
-            delete this->current_state;
-            delete this->future_state;
+            this->free_cstate();
+            this->free_fstate();
         }
 
         Cell *get(const unsigned int x, const unsigned int y)
         {
             // Acquire read-lock.
-            std::lock_guard<std::mutex> lock(this->read_lock);
-
+            // std::lock_guard<std::mutex> lock(this->read_lock);
             unsigned int key = this->form_key(x, y);
             try
             {
@@ -61,13 +60,15 @@ namespace fallingsand
         {
             // If setting oob, we just return early, killing off the OOB cell.
             unsigned int key;
-            try {
+            try
+            {
                 key = this->form_key(x, y);
-            } catch (const std::out_of_range& e){
+            }
+            catch (const std::out_of_range &e)
+            {
                 return;
             }
             (*(this->future_state))[key] = cell;
-            cell->set_parent(this);
             cell->set_position(x, y);
         }
 
@@ -77,20 +78,19 @@ namespace fallingsand
          * @param x x-position of cell.
          * @param y y-position of cell.
          */
-        void erase(const unsigned int x, const unsigned int y){
+        void erase(const unsigned int x, const unsigned int y)
+        {
             unsigned int key = this->form_key(x, y);
             this->future_state->erase(key);
         }
 
         void render(sf::RenderWindow &window)
         {
-            // Acquire render-lock
-            std::lock_guard<std::mutex> lock(this->read_lock);
+            int i = 0;
+            // Acquire write-lock
+            std::lock_guard<std::mutex> lock(this->write_lock);
             for (auto &kv : *(this->current_state))
             {
-                if(kv.second->get_state()->is_dead()){
-                    continue;
-                }
                 kv.second->render(window);
             }
         }
@@ -100,35 +100,47 @@ namespace fallingsand
          */
         void commit()
         {
-            // Acquire render-lock.
-            std::lock_guard<std::mutex> lock(this->read_lock);
-            
+            // Acquire write-lock.
+            std::lock_guard<std::mutex> lock(this->write_lock);
+
             // Copy future state onto current state.
-            delete this->current_state;
-            this->current_state = new CellMap(this->future_state->begin(), this->future_state->end());
+            this->copy_cstate();
+            // Copy current state onto future state.
+            this->copy_fstate();
         }
 
-        void update(const fallingsand::Chunk& chunk){
-            for(auto &kv : *(this->current_state))
+        bool update(const fallingsand::Chunk &chunk)
+        {
+            bool state = false;
+            // Update bottom-up
+            for (auto kv = this->current_state->rbegin(); kv != this->current_state->rend(); ++kv)
             {
-                fallingsand::Cell* cell = kv.second;
+                fallingsand::Cell *cell = kv->second;
 
-                if(chunk.point_within_bounds(cell->get_x(), cell->get_y())){
+                if (chunk.point_within_bounds(cell->get_x(), cell->get_y()))
+                {
+                    if (cell->update())
+                    {
+                        state = true;
+                    }
                     // Delete empty cells.
-                    if(cell->get_state()->is_dead()){
+                    if (cell->get_state()->is_dead())
+                    {
                         this->erase(cell->get_x(), cell->get_y());
                         continue;
                     }
-                    cell->update();
                 }
             }
+            return state;
         }
 
-        int get_width() const {
+        int get_width() const
+        {
             return this->width;
         }
 
-        int get_height() const {
+        int get_height() const
+        {
             return this->height;
         }
 
@@ -142,9 +154,64 @@ namespace fallingsand
             return (y * this->width) + x;
         }
 
+        /**
+         * @brief Free memory occupied by current state.
+         */
+        void free_cstate()
+        {
+            for (auto &kv : *(this->current_state))
+            {
+                fallingsand::Cell *cell = kv.second;
+                delete cell;
+                kv.second = nullptr;
+            }
+            delete this->current_state;
+        }
+
+        /**
+         * @brief Free memory occupied by future state.
+         */
+        void free_fstate()
+        {
+            for (auto &kv : *(this->future_state))
+            {
+                fallingsand::Cell *cell = kv.second;
+                delete cell;
+                kv.second = nullptr;
+            }
+            delete this->future_state;
+        }
+
+        /**
+         * @brief Copy future state onto current state.
+         */
+        void copy_cstate()
+        {
+            this->free_cstate();
+            this->current_state = new CellMap();
+            for(auto& kv : *(this->future_state)){
+                fallingsand::Cell* clone = kv.second->copy();
+                clone->set_parent(this);
+                this->current_state->insert({kv.first, clone});
+            }
+        }
+
+        /**
+         * @brief Copy current state onto future state.
+         */
+        void copy_fstate()
+        {
+            this->free_fstate();
+            this->future_state = new CellMap();
+            for(auto& kv : *(this->current_state)){
+                fallingsand::Cell* clone = kv.second->copy();
+                this->future_state->insert({kv.first, clone});
+            }
+        }
+
         unsigned int width;
         unsigned int height;
-        std::mutex read_lock;
+        std::mutex write_lock;
         fallingsand::CellMap *current_state;
         fallingsand::CellMap *future_state;
     };

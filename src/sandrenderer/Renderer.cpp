@@ -11,6 +11,7 @@
 #include <chrono>
 #include <thread>
 #include <unistd.h>
+#include <iostream>
 
 const int TICK_RATE = 16;
 
@@ -33,6 +34,6 @@ void sandrenderer::Renderer::begin_rendering() const {
             renderable->render(render_window);
         }
         render_window.display();
-        std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE));
+        //std::this_thread::sleep_for(std::chrono::milliseconds(TICK_RATE));
     }
 }

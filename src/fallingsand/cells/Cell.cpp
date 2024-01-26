@@ -12,8 +12,7 @@
 #include "CellularMatrix.hpp"
 #include "../../sandrenderer/Pixel.hpp"
 
-#include "types/Wall.hpp"
-#include "types/Sand.hpp"
+#include "types/AllTypes.hpp"
 
 fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::CellType type) {
     fallingsand::Cell* cell;
@@ -28,11 +27,16 @@ fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::C
             pixel = new sandrenderer::Pixel(194, 178, 128);
             state = new fallingsand::elements::Sand();
             break;
+        case fallingsand::CellType::WATER:
+            pixel = new sandrenderer::Pixel(49, 140, 231);
+            state = new fallingsand::elements::Water();
+            break;
         default:
             throw std::invalid_argument("Cannot create a Cell of undefined CellType.");
     }
 
-    cell = new fallingsand::Cell(type, state, pixel);
+    cell = new fallingsand::Cell(type, pixel);
+    cell->set_state(state);
     return cell;
 }
 

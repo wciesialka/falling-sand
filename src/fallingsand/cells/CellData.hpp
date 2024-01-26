@@ -11,8 +11,11 @@
 
 namespace fallingsand {
     struct CellData {
-        int health = 1;
-        unsigned long lifetime = 0;
+        int health;
+        unsigned long lifetime;
+
+        CellData() : health(1), lifetime(0) {}
+        CellData(int health) : health(health), lifetime(0) {}
     };
 }
 
