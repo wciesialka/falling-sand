@@ -7,6 +7,7 @@
 */
 
 #include "Pixel.hpp"
+#include <iostream>
 #include <SFML/Graphics/Vertex.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 

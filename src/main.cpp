@@ -16,10 +16,10 @@
 #include "fallingsand/Simulation.hpp"
 #include "fallingsand/cells/CellFactory.hpp"
 
-#define WIDTH 100
-#define HEIGHT 100
+#define WIDTH 320
+#define HEIGHT 320
 
-const int TICK_RATE = 20;
+const int TICK_RATE = 10;
 
 void start_rendering(sandrenderer::Renderer* renderer){
     renderer->begin_rendering();
@@ -34,6 +34,18 @@ int main(){
     for(int i = 0; i < WIDTH; i++){
         for(int j = HEIGHT-2; j < HEIGHT; j++){
             factory->create(fallingsand::CellType::WALL, i, j);
+        }
+    }
+
+    for(int i = 120; i < 220; i++){
+        for(int j = 100; j < 104; j++){
+            factory->create(fallingsand::CellType::SAND, i, j);
+        }
+    }
+
+    for(int i = 10; i < 300; i++){
+        for(int j = 2; j < 10; j++){
+            factory->create(fallingsand::CellType::WATER, i, j);
         }
     }
     

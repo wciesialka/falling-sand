@@ -20,7 +20,7 @@ namespace sandrenderer
     class Pixel : public sandrenderer::Renderable
     {
     public:
-        static const int ACTUAL_SIZE = 5;
+        static const int ACTUAL_SIZE = 2;
         /**
          * Constructor for the Pixel renderable.
          */

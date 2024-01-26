@@ -11,6 +11,7 @@
 
 #include <map>
 #include <exception>
+#include <iostream>
 #include "CellType.hpp"
 #include "CellState.hpp"
 #include "../../sandrenderer/Renderable.hpp"
@@ -109,6 +110,7 @@ namespace fallingsand
             fallingsand::Cell* copy = fallingsand::Cell::create_cell_from_type(this->get_type());
             fallingsand::CellState* state = this->get_state()->clone();
             copy->set_state(state);
+            copy->set_position(this->get_x(), this->get_y());
             return copy;
         }
 

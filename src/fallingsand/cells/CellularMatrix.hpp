@@ -24,8 +24,8 @@ namespace fallingsand
     public:
         CellularMatrix(const unsigned int width, const unsigned int height) : width(width), height(height)
         {
-            this->current_state = new fallingsand::CellMap;
-            this->future_state = new fallingsand::CellMap;
+            this->current_state = fallingsand::CellMap();
+            this->future_state = fallingsand::CellMap();
         }
 
         ~CellularMatrix()
@@ -41,7 +41,7 @@ namespace fallingsand
             unsigned int key = this->form_key(x, y);
             try
             {
-                return this->current_state->at(key);
+                return this->future_state.at(key);
             }
             catch (const std::out_of_range &e)
             {
@@ -68,7 +68,7 @@ namespace fallingsand
             {
                 return;
             }
-            (*(this->future_state))[key] = cell;
+            this->future_state[key] = cell;
             cell->set_position(x, y);
         }
 
@@ -81,15 +81,15 @@ namespace fallingsand
         void erase(const unsigned int x, const unsigned int y)
         {
             unsigned int key = this->form_key(x, y);
-            this->future_state->erase(key);
+            delete this->future_state[key];
+            this->future_state.erase(key);
         }
 
         void render(sf::RenderWindow &window)
         {
-            int i = 0;
             // Acquire write-lock
             std::lock_guard<std::mutex> lock(this->write_lock);
-            for (auto &kv : *(this->current_state))
+            for (auto &kv : (this->current_state))
             {
                 kv.second->render(window);
             }
@@ -105,15 +105,13 @@ namespace fallingsand
 
             // Copy future state onto current state.
             this->copy_cstate();
-            // Copy current state onto future state.
-            this->copy_fstate();
         }
 
         bool update(const fallingsand::Chunk &chunk)
         {
             bool state = false;
             // Update bottom-up
-            for (auto kv = this->current_state->rbegin(); kv != this->current_state->rend(); ++kv)
+            for (auto kv = this->current_state.rbegin(); kv != this->current_state.rend(); ++kv)
             {
                 fallingsand::Cell *cell = kv->second;
 
@@ -159,13 +157,14 @@ namespace fallingsand
          */
         void free_cstate()
         {
-            for (auto &kv : *(this->current_state))
+            for (auto &kv : this->current_state)
             {
                 fallingsand::Cell *cell = kv.second;
-                delete cell;
-                kv.second = nullptr;
+                if(cell){
+                    delete cell;
+                }
             }
-            delete this->current_state;
+            this->current_state.clear();
         }
 
         /**
@@ -173,13 +172,14 @@ namespace fallingsand
          */
         void free_fstate()
         {
-            for (auto &kv : *(this->future_state))
+            for (auto &kv : this->future_state)
             {
                 fallingsand::Cell *cell = kv.second;
-                delete cell;
-                kv.second = nullptr;
+                if(cell){
+                    delete cell;
+                }
+                this->future_state.erase(kv.first);
             }
-            delete this->future_state;
         }
 
         /**
@@ -188,32 +188,18 @@ namespace fallingsand
         void copy_cstate()
         {
             this->free_cstate();
-            this->current_state = new CellMap();
-            for(auto& kv : *(this->future_state)){
+            for(auto& kv : this->future_state){
                 fallingsand::Cell* clone = kv.second->copy();
                 clone->set_parent(this);
-                this->current_state->insert({kv.first, clone});
-            }
-        }
-
-        /**
-         * @brief Copy current state onto future state.
-         */
-        void copy_fstate()
-        {
-            this->free_fstate();
-            this->future_state = new CellMap();
-            for(auto& kv : *(this->current_state)){
-                fallingsand::Cell* clone = kv.second->copy();
-                this->future_state->insert({kv.first, clone});
+                this->current_state.insert({kv.first, clone});
             }
         }
 
         unsigned int width;
         unsigned int height;
         std::mutex write_lock;
-        fallingsand::CellMap *current_state;
-        fallingsand::CellMap *future_state;
+        fallingsand::CellMap current_state;
+        fallingsand::CellMap future_state;
     };
 
 }
