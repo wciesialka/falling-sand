@@ -31,9 +31,8 @@ namespace fallingsand
          * @brief Construct a cell.
          * 
          * @param state Starting state of the cell.
-         * @param renderable Renderable determining how the Cell should be rendered.
         */
-        Cell(fallingsand::CellState* state, sandrenderer::Renderable *renderable) : x(0), y(0), renderable(renderable)
+        Cell(fallingsand::CellState* state) : x(0), y(0)
         {
             this->set_state(state);
         }
@@ -42,7 +41,6 @@ namespace fallingsand
         */
         ~Cell()
         {
-            delete this->renderable;
             delete this->state;
         }
 
@@ -134,12 +132,7 @@ namespace fallingsand
             return copy;
         }
 
-        void render(sf::RenderWindow &window) const override
-        {
-            this->renderable->set_render_position(this->get_x(), this->get_y());
-            this->renderable->render(window);
-        }
-
+        void render(sf::RenderWindow &window) const override;
         /**
          * @brief Set the parent matrix.
          *
@@ -212,16 +205,6 @@ namespace fallingsand
             return this->state;
         }
 
-        /**
-         * @brief Get the renderable of the cell.
-         *
-         * @return Cell's renderable.
-         */
-        sandrenderer::Renderable *get_renderable() const
-        {
-            return this->renderable;
-        }
-
     private:
         /**
          * @brief Set the state of the cell.
@@ -234,20 +217,9 @@ namespace fallingsand
             state->set_parent(this);
         }
 
-        /**
-         * @brief Set the cell's renderable.
-         *
-         * @param renderable New renderable.
-         */
-        void set_renderable(sandrenderer::Renderable *renderable)
-        {
-            this->renderable = renderable;
-        }
-
         int x;
         int y;
         fallingsand::CellState *state;
-        sandrenderer::Renderable *renderable;
 
         fallingsand::CellularMatrix *parent;
     };

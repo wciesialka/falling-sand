@@ -14,28 +14,25 @@
 
 #include "types/AllTypes.hpp"
 
+
 fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::CellType type) {
     fallingsand::Cell* cell;
-    sandrenderer::Pixel* pixel;
     fallingsand::CellState* state;
     switch(type){
         case fallingsand::CellType::WALL:
-            pixel = new sandrenderer::Pixel(169, 169, 169);
             state = new fallingsand::elements::Wall();
             break;
         case fallingsand::CellType::SAND:
-            pixel = new sandrenderer::Pixel(194, 178, 128);
             state = new fallingsand::elements::Sand();
             break;
         case fallingsand::CellType::WATER:
-            pixel = new sandrenderer::Pixel(49, 140, 231);
             state = new fallingsand::elements::Water();
             break;
         default:
             throw std::invalid_argument("Cannot create a Cell of undefined CellType.");
     }
 
-    cell = new fallingsand::Cell(state, pixel);
+    cell = new fallingsand::Cell(state);
     return cell;
 }
 
@@ -63,4 +60,15 @@ void fallingsand::Cell::set_neighbor(const int dx, const int dy, fallingsand::Ce
     } catch(std::out_of_range& e) {
         return;
     }
+}
+
+void fallingsand::Cell::render(sf::RenderWindow &window) const {
+    uint32_t rgba = (uint32_t)(this->get_type());
+    char a = (rgba >> 24) & 0xFF;
+    char r = (rgba >> 16) & 0xFF;
+    char g = (rgba >> 8) & 0xFF;
+    char b = (rgba) & 0xFF;
+    sf::Color sf_color(r, g, b, a);
+    sandrenderer::Pixel pixel(this->get_x(), this->get_y(), sf_color);
+    pixel.render(window);
 }

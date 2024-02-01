@@ -10,11 +10,14 @@
 #define FALLINGSAND_CELLS_CELLTYPE_H
 
 namespace fallingsand {
+    /**
+     * @brief CellType enum. Each value is the type's color. 
+    */
     enum CellType {
-        EMPTY,
-        SAND,
-        WALL,
-        WATER
+        EMPTY = 0,
+        SAND = 0xFFC2B280,
+        WALL = 0xFFA9A9A9,
+        WATER = 0xFF318CE7
     };
 }
 
