@@ -16,6 +16,9 @@ namespace sandrenderer {
     */
     class Renderable {
         public:
+            /**
+             * @brief Abstract constructor. Set position on screen.
+            */
             Renderable() : render_position(sf::Vector2f(0, 0)) {};
             Renderable(sf::Vector2f position) : render_position(position) {};
             Renderable(int x, int y) : render_position(sf::Vector2f(x, y)) {};

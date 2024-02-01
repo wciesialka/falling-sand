@@ -13,15 +13,23 @@
 
 namespace fallingsand {
     namespace elements {
+        /**
+         * @brief Wall element. Does not interact with other elements.
+        */
         class Wall : public fallingsand::elements::ImmovableCell {
             public:
+            /**
+             * @brief Construct a Wall CellState.
+             * 
+             * @param data Initial data.
+            */
             Wall(const CellData data = CellData()) : fallingsand::elements::ImmovableCell(fallingsand::CellType::WALL, data) {}
 
-            virtual bool step() {
+            bool step() override {
                 return false;
             }
 
-            virtual fallingsand::elements::Wall* clone() const {
+            fallingsand::elements::Wall* clone() const override {
                 return new fallingsand::elements::Wall(this->get_data());
             }
         };

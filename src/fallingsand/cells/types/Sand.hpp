@@ -13,23 +13,32 @@
 
 namespace fallingsand {
     namespace elements {
+
+        /**
+         * @brief Sand element. Falls and does not interact with other elements.
+        */
         class Sand : public fallingsand::elements::MovableCell {
             public:
+            /**
+             * @brief Construct a Sand type Cell State.
+             * 
+             * @param data Initial data.
+            */
             Sand(const CellData data = CellData()) : fallingsand::elements::MovableCell(fallingsand::CellType::SAND, data) {}
 
-            virtual int get_falling_speed() const {
+            int get_falling_speed() const override {
                 return 3;
             }
 
-            virtual unsigned int get_falling_dx() const {
+            unsigned int get_falling_dx() const override {
                 return 1;
             }
             
-            virtual bool step() {
+            bool step() override {
                 return false;
             }
 
-            virtual fallingsand::elements::Sand* clone() const {
+            fallingsand::elements::Sand* clone() const override {
                 return new fallingsand::elements::Sand(this->get_data());
             }
         };

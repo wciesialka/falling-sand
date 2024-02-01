@@ -15,9 +15,9 @@
 
 const int TICK_RATE = 16;
 
-void sandrenderer::Renderer::begin_rendering() const {
-    sf::RenderWindow& render_window = this->window->get_window();
-    while (render_window.isOpen())
+void sandrenderer::Renderer::begin_rendering() {
+    sf::RenderWindow& render_window = this->get_window()->get_render_window();
+    while (this->is_open())
     {
         sf::Event event;
         while (render_window.pollEvent(event))

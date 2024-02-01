@@ -16,8 +16,17 @@
 #include "CellularMatrix.hpp"
 
 namespace fallingsand {
+
+    /**
+     * @brief Factory for producing cells and adding them to a matrix.
+    */
     class CellFactory {
         public:
+            /**
+             * @brief Construct a Cell Factory.
+             * 
+             * @param matrix Bound matrix.
+            */
             CellFactory(fallingsand::CellularMatrix* matrix) : matrix(matrix) {};
 
             /**
@@ -35,7 +44,7 @@ namespace fallingsand {
             }
 
         private:
-            fallingsand::CellularMatrix* matrix;
+            fallingsand::CellularMatrix* matrix; // Bound matrix.
     };
 }
 

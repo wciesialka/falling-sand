@@ -54,7 +54,7 @@ namespace sandrenderer
             return this->color;
         }
 
-        virtual void render(sf::RenderWindow &window) const;
+        void render(sf::RenderWindow &window) const override;
 
     private:
         sf::Color color;

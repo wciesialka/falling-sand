@@ -19,29 +19,50 @@ namespace fallingsand
 
     typedef std::map<unsigned int, fallingsand::Cell *> CellMap;
 
+    /**
+     * @brief Class responsible for holding the current and future state
+     * of the cellular matrix.
+     * 
+     * Internally, it actually uses a sparse map for both to conserve memory.
+    */
     class CellularMatrix
     {
     public:
+        /**
+         * @brief Construct a CellularMatrix
+         * 
+         * @param width Width of matrix.
+         * @param height Height of matrix.
+        */
         CellularMatrix(const unsigned int width, const unsigned int height) : width(width), height(height)
         {
             this->current_state = fallingsand::CellMap();
             this->future_state = fallingsand::CellMap();
         }
 
+        /**
+         * @brief Destruct the matrix.
+        */
         ~CellularMatrix()
         {
             this->free_cstate();
             this->free_fstate();
         }
 
-        Cell *get(const unsigned int x, const unsigned int y)
+        /**
+         * @brief Get the cell at the specific location in the current state.
+         * 
+         * @param x Cell x-coordinate.
+         * @param y Cell y-coordinate.
+         * 
+         * @return Cell at location.
+        */
+        Cell *get(const unsigned int x, const unsigned int y) const
         {
-            // Acquire read-lock.
-            // std::lock_guard<std::mutex> lock(this->read_lock);
             unsigned int key = this->form_key(x, y);
             try
             {
-                return this->future_state.at(key);
+                return this->current_state.at(key);
             }
             catch (const std::out_of_range &e)
             {
@@ -85,6 +106,11 @@ namespace fallingsand
             this->future_state.erase(key);
         }
 
+        /**
+         * @brief Render the current state onto a window.
+         * 
+         * @param window SFML RenderWindow to render onto.
+        */
         void render(sf::RenderWindow &window)
         {
             // Acquire write-lock
@@ -107,42 +133,38 @@ namespace fallingsand
             this->copy_cstate();
         }
 
-        bool update(const fallingsand::Chunk &chunk)
-        {
-            bool state = false;
-            // Update bottom-up
-            for (auto kv = this->current_state.rbegin(); kv != this->current_state.rend(); ++kv)
-            {
-                fallingsand::Cell *cell = kv->second;
+        bool update(const fallingsand::Chunk chunk);
 
-                if (chunk.point_within_bounds(cell->get_x(), cell->get_y()))
-                {
-                    if (cell->update())
-                    {
-                        state = true;
-                    }
-                    // Delete empty cells.
-                    if (cell->get_state()->is_dead())
-                    {
-                        this->erase(cell->get_x(), cell->get_y());
-                        continue;
-                    }
-                }
-            }
-            return state;
-        }
-
+        /**
+         * @brief Get the width of the matrix.
+         * 
+         * @return Matrix's width.
+        */
         int get_width() const
         {
             return this->width;
         }
 
+        /**
+         * @brief Get the height of the matrix.
+         * 
+         * @return Matrix's height.
+        */
         int get_height() const
         {
             return this->height;
         }
 
     private:
+
+        /**
+         * @brief Form the key (index) for a cell given coordinates.
+         * 
+         * @param x Cell x-coordinate
+         * @param y Cell y-coordinate
+         * 
+         * @return Index key
+        */
         unsigned int form_key(const unsigned int x, const unsigned int y) const
         {
             if (x >= this->width || y >= this->height)

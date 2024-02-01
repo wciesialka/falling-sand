@@ -16,17 +16,29 @@
 
 namespace sandrenderer
 {
+    /**
+     * @brief Renderer, responsible for creating a window and handling events. 
+    */
     class Renderer
     {
     public:
         typedef std::vector<sandrenderer::Renderable *> Renderables;
 
+        /**
+         * @brief Create a renderer and window.
+         * 
+         * @param width Width of renderer window (in px).
+         * @param height height of renderer window (in px).
+        */
         Renderer(int width, int height)
         {
             this->window = new sandrenderer::Window(width, height, "Falling Sand");
             this->renderables = new std::vector<sandrenderer::Renderable *>();
         }
 
+        /**
+         * @brief Destructor.
+        */
         ~Renderer(){
             delete this->window;
         }
@@ -62,10 +74,18 @@ namespace sandrenderer
             return this->window;
         }
 
-        void begin_rendering() const;
+        /**
+         * @brief Begin the rendering process.
+        */
+        void begin_rendering();
 
-        bool is_open() {
-            return this->get_window()->get_window().isOpen();
+        /**
+         * @brief Check if the window is open or not.
+         * 
+         * @return True if the window is open, false otherwise.
+        */
+        bool is_open() const {
+            return this->get_window()->get_render_window().isOpen();
         }
 
     private:

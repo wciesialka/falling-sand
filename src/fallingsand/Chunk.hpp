@@ -11,9 +11,19 @@
 
 namespace fallingsand
 {
+    /**
+     * @brief Chunk class. Contains a position and size. Controls update procedures.
+    */
     class Chunk
     {
     public:
+        /**
+         * @brief Construct a chunk.
+         * @param width Width of the chunk.
+         * @param height Height of the chunk.
+         * @param x Chunk x-position.
+         * @param y Chunk y-position.
+        */
         Chunk() : width(0), height(0), x(0), y(0), update_this_frame(false), update_next_frame(false){};
         Chunk(const unsigned int width, const unsigned int height, unsigned int x, unsigned int y)
             : width(width), height(height), x(x), y(y), update_this_frame(true), update_next_frame(false){};
@@ -98,8 +108,8 @@ namespace fallingsand
         unsigned int x;
         unsigned int y;
 
-        bool update_this_frame;
-        bool update_next_frame;
+        bool update_this_frame; // True if the chunk updates this cycle, false otherwise.
+        bool update_next_frame; // True if the chunk should update next cycle, false otherwise.
     };
 }
 

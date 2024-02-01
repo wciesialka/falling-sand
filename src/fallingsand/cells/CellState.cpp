@@ -9,10 +9,6 @@
 #include "CellState.hpp"
 #include "Cell.hpp"
 
-fallingsand::CellType fallingsand::CellState::get_type() const {
-    return this->get_parent()->get_type();
-}
-
 fallingsand::CellState* fallingsand::CellState::get_neighbor(const int dx, const int dy) const {
     return this->get_parent()->get_neighbor(dx, dy);
 }

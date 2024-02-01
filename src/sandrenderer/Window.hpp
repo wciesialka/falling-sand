@@ -14,14 +14,27 @@
 #include "Renderable.hpp"
 
 namespace sandrenderer {
+    /**
+     * @brief Window class, wraps an \ref sf::RenderWindow.
+    */
     class Window {
         public:
             static const sf::Uint32 WINDOW_FLAGS = sf::Style::Titlebar | sf::Style::Close;
 
-            Window(sf::RenderWindow* window) : window(window) {};
+            /**
+             * @brief Construct the window.
+             * 
+             * @param width Width of the window (in px).
+             * @param height Height of the window (in px).
+             * @param title Window title.
+            */
             Window(int width, int height, std::string title) {
                 this->window = new sf::RenderWindow(sf::VideoMode(width, height), title, sandrenderer::Window::WINDOW_FLAGS);
             };
+
+            /**
+             * @brief Close and destruct window.
+            */
             ~Window() {
                 this->close();
                 delete this->window;
@@ -36,8 +49,10 @@ namespace sandrenderer {
 
             /**
              * @brief Get the inner rendering window.
+             * 
+             * @return Inner rendering window.
             */
-            sf::RenderWindow& get_window() const {
+            sf::RenderWindow& get_render_window() const {
                 return *(this->window);
             }
         private:

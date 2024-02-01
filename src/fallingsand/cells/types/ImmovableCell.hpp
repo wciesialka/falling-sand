@@ -13,11 +13,21 @@
 
 namespace fallingsand {
     namespace elements {
+
+        /**
+         * @brief ABC for CellTypes unaffected by gravity.
+        */
         class ImmovableCell : public fallingsand::CellState {
             public:
+                /**
+                 * @brief Abstract constructor. Pass along Cell type and data information.
+                 * 
+                 * @param type Cell type.
+                 * @param data Initial cell data.
+                */
                 ImmovableCell(const CellType type, const CellData data) : fallingsand::CellState(type, data) {}
 
-                virtual bool fall() {
+                bool fall() override {
                     return false;
                 }
         };

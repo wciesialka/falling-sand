@@ -21,19 +21,37 @@ namespace fallingsand
 
     class CellularMatrix;
 
+    /**
+     * @brief Cell class. Has a position within the matrix, and a state. Also holds a method of rendering.
+    */
     class Cell : public sandrenderer::Renderable
     {
     public:
+        /**
+         * @brief Construct a cell.
+         * 
+         * @param state Starting state of the cell.
+         * @param renderable Renderable determining how the Cell should be rendered.
+        */
         Cell(fallingsand::CellState* state, sandrenderer::Renderable *renderable) : x(0), y(0), renderable(renderable)
         {
             this->set_state(state);
         }
+        /**
+         * @brief Destruct a cell.
+        */
         ~Cell()
         {
             delete this->renderable;
             delete this->state;
         }
 
+        /**
+         * @brief Create a Cell from a \ref fallingsand::CellType.
+         * 
+         * @param type Cell Type
+         * @return Generated cell.
+        */
         static fallingsand::Cell *create_cell_from_type(const fallingsand::CellType type);
 
         /**
@@ -116,7 +134,7 @@ namespace fallingsand
             return copy;
         }
 
-        virtual void render(sf::RenderWindow &window) const
+        void render(sf::RenderWindow &window) const override
         {
             this->renderable->set_render_position(this->get_x(), this->get_y());
             this->renderable->render(window);
@@ -142,6 +160,11 @@ namespace fallingsand
             return this->parent;
         }
 
+        /**
+         * @brief Get the type of the cell.
+         * 
+         * @return The cell's type.
+        */
         fallingsand::CellType get_type() const {
             return this->get_state()->get_type();
         }
@@ -165,11 +188,12 @@ namespace fallingsand
         fallingsand::CellState *get_neighbor(const int dx, const int dy) const;
 
         /**
-         * @brief Get the state of a neighboring cell.
+         * @brief Set a neighboring cell to contain a specific cell.
          *
          * @param dx Difference in x-position.
          * @param dy Difference in y-position.
          * @param cell Cell to set.
+         * @param type Type of cell to set.
          */
         void set_neighbor(const int dx, const int dy, fallingsand::Cell *cell) const;
         void set_neighbor(const int dx, const int dy, fallingsand::CellType type) const

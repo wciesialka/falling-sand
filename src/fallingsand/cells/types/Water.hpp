@@ -13,23 +13,31 @@
 
 namespace fallingsand {
     namespace elements {
+        /**
+         * @brief Water element. Basic fluid, flows but does not interact with other elements.
+        */
         class Water : public fallingsand::elements::MovableCell {
             public:
+            /**
+             * @brief Construct a water type cell state.
+             * 
+             * @param data Initial data.
+            */
             Water(const CellData data = CellData()) : fallingsand::elements::MovableCell(fallingsand::CellType::WATER, data) {}
 
-            virtual int get_falling_speed() const {
+            int get_falling_speed() const override {
                 return 10;
             }
 
-            virtual unsigned int get_falling_dx() const {
+            unsigned int get_falling_dx() const override {
                 return 5;
             }
             
-            virtual bool step() {
+            bool step() override {
                 return false;
             }
 
-            virtual fallingsand::elements::Water* clone() const {
+            fallingsand::elements::Water* clone() const override {
                 return new fallingsand::elements::Water(this->get_data());
             }
 

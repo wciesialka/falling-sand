@@ -19,11 +19,23 @@ namespace fallingsand
 {
     class Cell;
 
+    /**
+     * @brief ABC for the state of a cell. Contains update procedures and type information, as well as some data.
+    */
     class CellState
     {
     public:
+        /**
+         * @brief ABC Construct method.
+         * 
+         * @param type Cell's type.
+         * @param initial_data Cell's initial data.
+        */
         CellState(const fallingsand::CellType type, const fallingsand::CellData initial_data) : type(type), data(initial_data) {}
 
+        /**
+         * @brief Virtual destructor.
+        */
         virtual ~CellState() {}
 
         /**
@@ -50,6 +62,11 @@ namespace fallingsand
             return this->data;
         }
 
+        /**
+         * @brief Get the cell's type.
+         * 
+         * @return Cell's type.
+        */
         fallingsand::CellType get_type() const {
             return this->type;
         }
@@ -131,10 +148,6 @@ namespace fallingsand
         virtual bool step() = 0;
 
         /**
-         * PROPERTIES
-         */
-
-        /**
          * @brief Preform freefalling calculations.
          * 
          * @return True if falling, false if now at rest.
@@ -178,13 +191,6 @@ namespace fallingsand
         }
 
         /**
-         * @brief Get type of cell.
-         * 
-         * @return Cell type.
-        */
-        fallingsand::CellType get_type() const;
-
-        /**
          * @brief Get a neighboring cell's state.
          * 
          * @param dx Difference of x values.
@@ -215,8 +221,8 @@ namespace fallingsand
         bool is_falling;
 
         fallingsand::Cell* parent;
-        fallingsand::CellData data;
         fallingsand::CellType type;
+        fallingsand::CellData data;
     };
 }
 

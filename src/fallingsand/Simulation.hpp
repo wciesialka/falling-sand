@@ -9,8 +9,6 @@
 #ifndef FALLINGSAND_SIMULATION_H
 #define FALLINGSAND_SIMULATION_H
 
-// TODO: Optimize to using chunks, etc.
-
 #include <map>
 #include <vector>
 #include <exception>
@@ -21,6 +19,9 @@
 
 namespace fallingsand
 {
+    /**
+     * @brief Simulation class. Contains chunks, and a matrix to render and update.
+    */
     class Simulation : public sandrenderer::Renderable
     {
     public:
@@ -37,6 +38,9 @@ namespace fallingsand
             this->factory = new fallingsand::CellFactory(this->matrix);
             this->initialize_chunks();
         }
+        /**
+         * @brief Destructor.
+        */
         ~Simulation()
         {
             delete this->factory;
@@ -44,27 +48,52 @@ namespace fallingsand
             delete this->matrix;
         }
 
-        virtual void render(sf::RenderWindow &window) const
+        void render(sf::RenderWindow &window) const override
         {
             this->matrix->render(window);
         }
 
+        /**
+         * @brief Get the width of the simulation.
+         * 
+         * @return Width of the simulation.
+        */
         int get_width() const {
             return this->matrix->get_width();
         }
 
+        /**
+         * @brief Get the height of the simulation.
+         * 
+         * @return Height of the simulation.
+        */
         int get_height() const {
             return this->matrix->get_height();
         }
 
+        /**
+         * @brief Get the number of chunks the simulation contains.
+         * 
+         * @return Number of chunks.
+        */
         int get_chunk_count() const {
             return this->chunk_count;
         }
 
+        /**
+         * @brief Get the width of one (and every) chunk.
+         * 
+         * @return Chunk width.
+        */
         int get_chunk_width() const {
             return this->get_width() / this->get_chunk_count();
         }
 
+        /**
+         * @brief Get the height of one (and every) chunk.
+         * 
+         * @return Chunk height.
+        */
         int get_chunk_height() const {
             return this->get_height() / this->get_chunk_count();
         }
