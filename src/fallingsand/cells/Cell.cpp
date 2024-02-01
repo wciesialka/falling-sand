@@ -35,8 +35,7 @@ fallingsand::Cell* fallingsand::Cell::create_cell_from_type(const fallingsand::C
             throw std::invalid_argument("Cannot create a Cell of undefined CellType.");
     }
 
-    cell = new fallingsand::Cell(type, pixel);
-    cell->set_state(state);
+    cell = new fallingsand::Cell(state, pixel);
     return cell;
 }
 

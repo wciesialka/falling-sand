@@ -22,7 +22,7 @@ namespace fallingsand
     class CellState
     {
     public:
-        CellState(const CellData initial_data) : data(initial_data) {}
+        CellState(const fallingsand::CellType type, const fallingsand::CellData initial_data) : type(type), data(initial_data) {}
 
         virtual ~CellState() {}
 
@@ -48,6 +48,10 @@ namespace fallingsand
         */
         fallingsand::CellData get_data() const {
             return this->data;
+        }
+
+        fallingsand::CellType get_type() const {
+            return this->type;
         }
 
         /**
@@ -212,6 +216,7 @@ namespace fallingsand
 
         fallingsand::Cell* parent;
         fallingsand::CellData data;
+        fallingsand::CellType type;
     };
 }
 

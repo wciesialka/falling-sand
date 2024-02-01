@@ -15,7 +15,7 @@ namespace fallingsand {
     namespace elements {
         class Water : public fallingsand::elements::MovableCell {
             public:
-            Water(const CellData data = CellData()) : fallingsand::elements::MovableCell(data) {}
+            Water(const CellData data = CellData()) : fallingsand::elements::MovableCell(fallingsand::CellType::WATER, data) {}
 
             virtual int get_falling_speed() const {
                 return 10;

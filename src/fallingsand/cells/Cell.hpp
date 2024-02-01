@@ -24,8 +24,10 @@ namespace fallingsand
     class Cell : public sandrenderer::Renderable
     {
     public:
-        Cell(fallingsand::CellType type, sandrenderer::Renderable *renderable) : x(0), y(0), type(type), renderable(renderable)
-        {}
+        Cell(fallingsand::CellState* state, sandrenderer::Renderable *renderable) : x(0), y(0), renderable(renderable)
+        {
+            this->set_state(state);
+        }
         ~Cell()
         {
             delete this->renderable;
@@ -140,14 +142,8 @@ namespace fallingsand
             return this->parent;
         }
 
-        /**
-         * @brief Get the type of this cell.
-         *
-         * @return Cell type.
-         */
-        fallingsand::CellType get_type() const
-        {
-            return this->type;
+        fallingsand::CellType get_type() const {
+            return this->get_state()->get_type();
         }
 
         /**
@@ -215,16 +211,6 @@ namespace fallingsand
         }
 
         /**
-         * @brief Set the type of this cell.
-         *
-         * @param type New cell type.
-         */
-        void set_type(const fallingsand::CellType type)
-        {
-            this->type = type;
-        }
-
-        /**
          * @brief Set the cell's renderable.
          *
          * @param renderable New renderable.
@@ -236,7 +222,6 @@ namespace fallingsand
 
         int x;
         int y;
-        fallingsand::CellType type;
         fallingsand::CellState *state;
         sandrenderer::Renderable *renderable;
 

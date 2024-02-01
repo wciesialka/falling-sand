@@ -15,7 +15,7 @@ namespace fallingsand {
     namespace elements {
         class Wall : public fallingsand::elements::ImmovableCell {
             public:
-            Wall(const CellData data = CellData()) : fallingsand::elements::ImmovableCell(data) {}
+            Wall(const CellData data = CellData()) : fallingsand::elements::ImmovableCell(fallingsand::CellType::WALL, data) {}
 
             virtual bool step() {
                 return false;

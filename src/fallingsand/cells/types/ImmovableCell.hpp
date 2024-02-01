@@ -15,7 +15,7 @@ namespace fallingsand {
     namespace elements {
         class ImmovableCell : public fallingsand::CellState {
             public:
-                ImmovableCell(const CellData data) : fallingsand::CellState(data) {}
+                ImmovableCell(const CellType type, const CellData data) : fallingsand::CellState(type, data) {}
 
                 virtual bool fall() {
                     return false;
