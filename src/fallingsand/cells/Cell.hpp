@@ -41,6 +41,7 @@ namespace fallingsand
         */
         ~Cell()
         {
+            this->parent = nullptr;
             delete this->state;
         }
 
@@ -112,9 +113,7 @@ namespace fallingsand
          */
         void move(const int dx, const int dy)
         {
-            fallingsand::Cell* copy = fallingsand::Cell::create_cell_from_type(this->get_type());
-            fallingsand::CellState* state = this->get_state()->clone();
-            copy->set_state(state);
+            fallingsand::Cell* copy = this->copy();
             this->set_neighbor(dx, dy, copy);
             this->get_state()->kill();
         }
@@ -126,9 +125,9 @@ namespace fallingsand
         */
         fallingsand::Cell* copy() const {
             fallingsand::Cell* copy = fallingsand::Cell::create_cell_from_type(this->get_type());
-            fallingsand::CellState* state = this->get_state()->clone();
-            copy->set_state(state);
-            copy->set_position(this->get_x(), this->get_y());
+            // Copy any necessary data.
+            fallingsand::CellData data = this->get_state()->get_data();
+            copy->get_state()->set_data(data);
             return copy;
         }
 

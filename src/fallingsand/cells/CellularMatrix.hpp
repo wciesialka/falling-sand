@@ -79,18 +79,9 @@ namespace fallingsand
          */
         void set(const unsigned int x, const unsigned int y, fallingsand::Cell *cell)
         {
-            // If setting oob, we just return early, killing off the OOB cell.
-            unsigned int key;
-            try
-            {
-                key = this->form_key(x, y);
-            }
-            catch (const std::out_of_range &e)
-            {
-                return;
-            }
-            this->future_state[key] = cell;
             cell->set_position(x, y);
+            unsigned int key = this->form_key(x, y);
+            this->future_state[key] = cell;
         }
 
         /**
@@ -130,6 +121,7 @@ namespace fallingsand
             std::lock_guard<std::mutex> lock(this->write_lock);
 
             // Copy future state onto current state.
+            this->free_cstate();
             this->copy_cstate();
         }
 
@@ -200,8 +192,8 @@ namespace fallingsand
                 if(cell){
                     delete cell;
                 }
-                this->future_state.erase(kv.first);
             }
+            this->future_state.clear();
         }
 
         /**
@@ -209,9 +201,10 @@ namespace fallingsand
          */
         void copy_cstate()
         {
-            this->free_cstate();
             for(auto& kv : this->future_state){
-                fallingsand::Cell* clone = kv.second->copy();
+                fallingsand::Cell* original = kv.second;
+                fallingsand::Cell* clone = original->copy();
+                clone->set_position(original->get_x(), original->get_y());
                 clone->set_parent(this);
                 this->current_state.insert({kv.first, clone});
             }

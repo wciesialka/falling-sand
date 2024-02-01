@@ -31,24 +31,11 @@ int main(){
     renderer->add_renderable(simulation);
 
     fallingsand::CellFactory* factory = simulation->get_factory();
-    for(int i = 0; i < WIDTH; i++){
-        for(int j = HEIGHT-2; j < HEIGHT; j++){
-            factory->create(fallingsand::CellType::WALL, i, j);
-        }
-    }
-
     for(int i = 120; i < 220; i++){
         for(int j = 100; j < 104; j++){
             factory->create(fallingsand::CellType::SAND, i, j);
         }
     }
-
-    for(int i = 10; i < 300; i++){
-        for(int j = 2; j < 10; j++){
-            factory->create(fallingsand::CellType::WATER, i, j);
-        }
-    }
-    
     simulation->commit();
 
     sf::Thread render_thread(&start_rendering, renderer);
